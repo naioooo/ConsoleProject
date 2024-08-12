@@ -15,9 +15,8 @@ Player::~Player()
 {
 }
 
-void Player::move()
+void Player::move(vector<vector<Object*>>& gameobjects)
 {
-	vector<vector<Object*>>& GameObjects{ GameScene::m_gameobjects };
 
 	if (GetAsyncKeyState(VK_LEFT) & 0x8000) { //¿ÞÂÊ
 		if (m_point.x > 0)

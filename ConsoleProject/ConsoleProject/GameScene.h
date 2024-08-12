@@ -9,7 +9,6 @@ class GameScene :
 private:
 	vector<string> m_buffer;
 
-	vector<vector<Object*>> m_gameobjects;
 	Player* m_player;
 	vector<Monster*> m_monsters;
 	vector<Object*> m_obstacles;
@@ -22,6 +21,8 @@ public:
 	GameScene();
 	GameScene(Player*& player);
 	~GameScene();
+
+	static vector<vector<Object*>> m_gameobjects;
 
 	void loop();
 	void draw();

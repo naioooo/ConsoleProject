@@ -56,7 +56,7 @@ void GameScene::draw()
 
 void GameScene::input()
 {
-	m_player->move();
+	m_player->move(m_gameobjects);
 }
 
 void GameScene::update()
