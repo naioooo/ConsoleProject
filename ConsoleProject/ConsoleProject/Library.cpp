@@ -35,3 +35,19 @@ bool tick(DWORD& startTime)
 
     return false;
 }
+
+void setconsole()
+{
+    system("title shooting game");
+    system("mode con:cols=120 lines=28");
+
+    HANDLE hConsole;
+    CONSOLE_CURSOR_INFO ConsoleCursor;
+    hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+
+    ConsoleCursor.bVisible = 0;
+    ConsoleCursor.dwSize = 1;
+
+    SetConsoleCursorInfo(hConsole, &ConsoleCursor);
+
+}

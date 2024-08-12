@@ -29,9 +29,15 @@ struct Point
 {
 	int x;
 	int y;
+	
+	Point() {};
+	Point(int x, int y) : x(x), y(y) {};
 };
 
 void gotoxy(int x, int y);
 void gotoxy(Point p);
 void gotoxy(COORD coord);
 bool tick(DWORD& startTime);
+
+
+void setconsole();

@@ -20,9 +20,10 @@ Point Object::getpoint()
 
 void Object::draw()
 {
-    cout << " @ " << endl;
+    cout << "@" << endl;
 }
 
 void Object::insertbuffer(vector<string>& buffer)
 {
+    buffer[m_point.y][m_point.x] = '#';
 }

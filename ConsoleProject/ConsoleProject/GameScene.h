@@ -6,10 +6,17 @@
 class GameScene :
     public Scene
 {
+private:
 	vector<string> m_buffer;
 
+	vector<vector<Object*>> m_gameobjects;
 	Player* m_player;
 	vector<Monster*> m_monsters;
+	vector<Object*> m_obstacles;
+
+	random_device rd;
+
+	unsigned int m_generate_tick;
 
 public:
 	GameScene();
@@ -20,5 +27,13 @@ public:
 	void draw();
 	void input();
 	void update();
+
+	void generate_object();
+	void generate_map();
+	void generate_monster();
+	void generate_item();
+
+	bool collision_check(Object*& a, Object*& b);
+
 };
 

@@ -1,5 +1,6 @@
 #pragma once
 #include "Player.h"
+#include "GameScene.h"
 
 Player::Player()
 {
@@ -16,64 +17,32 @@ Player::~Player()
 
 void Player::move()
 {
+	vector<vector<Object*>>& GameObjects{ GameScene::m_gameobjects };
+
 	if (GetAsyncKeyState(VK_LEFT) & 0x8000) { //왼쪽
 		if (m_point.x > 0)
 		{
-			m_point.x--;
-		}
-		
+			m_point.x -= m_speed;
+		}		
 	}
 	if (GetAsyncKeyState(VK_RIGHT) & 0x8000) { //오른쪽		
-		if (m_point.x < MAX_WIDTH - 2)
+		if (m_point.x < MAX_WIDTH - 1 - m_speed)
 		{
-			m_point.x++;
+			m_point.x += m_speed;
 		}
 	}
 	if (GetAsyncKeyState(VK_UP) & 0x8000) { //위
 		if (m_point.y > 0)
 		{
-			m_point.y--;
+			m_point.y -= m_speed;
 		}
 	}
 	if (GetAsyncKeyState(VK_DOWN) & 0x8000) { //아래
-		if (m_point.y < MAX_HEIGHT - 2)
+		if (m_point.y < MAX_HEIGHT - 1 - m_speed)
 		{
-			m_point.y++;
+			m_point.y += m_speed;
 		}
 	}
-
-	/*
-	switch (ch)
-	{
-	case 'w':
-		if (m_point.y > 0)
-		{
-			m_point.y--;
-		}
-		break;
-	case 's':
-		if (m_point.y < 99)
-		{
-			m_point.y++;
-		}
-		break;
-	case 'a':
-		if (m_point.x > 0)
-		{
-			m_point.x--;
-		}
-		break;
-	case 'd':
-		if (m_point.x < 99)
-		{
-			m_point.x++;
-		}
-		break;
-
-	default:
-		break;
-	}
-	*/
 }
 
 void Player::attack()
