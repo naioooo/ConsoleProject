@@ -27,13 +27,18 @@ bool tick(DWORD& startTime)
     DWORD currentTime = GetTickCount64();
     DWORD elapsedTime = currentTime - startTime;
 
-    if (elapsedTime >= 100)
+    if (elapsedTime >= 10)
     {
         startTime = currentTime;
         return true;
     }
 
     return false;
+}
+
+void textcolor(int colorNum)
+{
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), colorNum);
 }
 
 void setconsole()
@@ -49,5 +54,4 @@ void setconsole()
     ConsoleCursor.dwSize = 1;
 
     SetConsoleCursorInfo(hConsole, &ConsoleCursor);
-
 }

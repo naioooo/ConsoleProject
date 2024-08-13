@@ -10,6 +10,7 @@ protected:
 	int m_attack;
 	int m_defense;
 
+	int m_dir;
 
 public:
 	Character();
@@ -21,10 +22,11 @@ public:
 	int getattack();
 	int getdefense();
 
-	virtual void draw();
+	virtual void insertbuffer(vector<string>& buffer);
+	virtual void update();
+
 	virtual void move();
 	virtual void attack();
-	virtual void update();
 
 };
 

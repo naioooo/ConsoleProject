@@ -1,7 +1,7 @@
 #pragma once
 #include "Library.h"
 
-class Object
+class Object : public enable_shared_from_this<Object>
 {
 protected:
 	Point m_point;
@@ -13,8 +13,8 @@ public:
 
 	Point getpoint();
 
-	virtual void draw();
 	virtual void insertbuffer(vector<string>& buffer);
-
+	virtual void update();
+	virtual bool collision_check(Point point);
 };
 

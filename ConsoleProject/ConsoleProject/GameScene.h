@@ -6,15 +6,14 @@
 class GameScene :
     public Scene
 {
+public:
+	static vector<vector<shared_ptr<Object>>> m_gameobjects;
+
 private:
+	shared_ptr<Player> m_player;
 	vector<string> m_buffer;
 
-	Player* m_player;
-	vector<Monster*> m_monsters;
-	vector<Object*> m_obstacles;
-
-	random_device rd;
-
+	random_device m_rd;
 	unsigned int m_generate_tick;
 
 public:
@@ -22,11 +21,9 @@ public:
 	GameScene(Player*& player);
 	~GameScene();
 
-	static vector<vector<Object*>> m_gameobjects;
-
-	void loop();
-	void draw();
-	void input();
+	void loop() override;
+	void draw() override;
+	void input() override;
 	void update();
 
 	void generate_object();
@@ -34,7 +31,5 @@ public:
 	void generate_monster();
 	void generate_item();
 
-	bool collision_check(Object*& a, Object*& b);
-
+	bool collision_object(Point point);
 };
-

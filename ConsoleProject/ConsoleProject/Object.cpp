@@ -18,12 +18,16 @@ Point Object::getpoint()
     return m_point;
 }
 
-void Object::draw()
-{
-    cout << "@" << endl;
-}
-
 void Object::insertbuffer(vector<string>& buffer)
 {
     buffer[m_point.y][m_point.x] = '#';
+}
+
+void Object::update()
+{
+}
+
+bool Object::collision_check(Point point)
+{
+    return false;
 }

@@ -25,6 +25,12 @@
     <Filter Include="헤더 파일\Scene">
       <UniqueIdentifier>{7e8288a9-faba-4b35-9529-3ef593fbf6cf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\Behavior Tree">
+      <UniqueIdentifier>{569937ab-776e-4d0d-a4a8-ad84ec0220ee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\Behavior Tree">
+      <UniqueIdentifier>{496d7480-22f5-4aaf-8eee-9370258db71b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -51,6 +57,12 @@
     <ClCompile Include="Monster.cpp">
       <Filter>소스 파일\Character</Filter>
     </ClCompile>
+    <ClCompile Include="Node.cpp">
+      <Filter>소스 파일\Behavior Tree</Filter>
+    </ClCompile>
+    <ClCompile Include="MonsterBehaviorTree.cpp">
+      <Filter>소스 파일\Behavior Tree</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Library.h">
@@ -73,6 +85,12 @@
     </ClInclude>
     <ClInclude Include="Monster.h">
       <Filter>헤더 파일\Character</Filter>
+    </ClInclude>
+    <ClInclude Include="Node.h">
+      <Filter>헤더 파일\Behavior Tree</Filter>
+    </ClInclude>
+    <ClInclude Include="MonsterBehaviorTree.h">
+      <Filter>헤더 파일\Behavior Tree</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -7,7 +7,7 @@ Character::Character()
 }
 
 Character::Character(const Point point, const int HP, const int speed, const int attack, const int defense)
-	: Object(point), m_HP(HP), m_speed(speed), m_attack(attack), m_defense(defense)
+	: Object(point), m_HP(HP), m_speed(speed), m_attack(attack), m_defense(defense), m_dir(0)
 {
 }
 
@@ -35,7 +35,11 @@ int Character::getdefense()
 	return m_defense;
 }
 
-void Character::draw()
+void Character::insertbuffer(vector<string>& buffer)
+{
+}
+
+void Character::update()
 {
 }
 
@@ -47,6 +51,3 @@ void Character::attack()
 {
 }
 
-void Character::update()
-{
-}

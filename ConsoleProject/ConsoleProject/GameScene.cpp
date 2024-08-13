@@ -1,9 +1,11 @@
 #pragma once
 #include "GameScene.h"
 
+vector<vector<shared_ptr<Object>>> GameScene::m_gameobjects{};
+
 GameScene::GameScene()
 {
-	m_player = new Player(Point(10, 10), 100, 1, 50, 50, "호날두");
+	m_gameobjects.resize(5);
 
 	string str;
 	str.resize(MAX_WIDTH, ' ');
@@ -15,6 +17,11 @@ GameScene::GameScene()
 
 	m_generate_tick = 0;
 	generate_map();
+
+	m_gameobjects[PLAYER].push_back(make_shared <Player>(Point(10, 10), 100, 1, 50, 50, "호날두"));
+	m_player = dynamic_pointer_cast<Player>(m_gameobjects[PLAYER][0]);
+
+	generate_monster();
 }
 
 GameScene::GameScene(Player* &player)
@@ -27,10 +34,6 @@ GameScene::GameScene(Player* &player)
 		m_buffer.push_back(str);
 	}
 	m_generate_tick = 0;
-
-	m_player = player;
-
-
 }
 
 GameScene::~GameScene()
@@ -48,52 +51,62 @@ void GameScene::draw()
 {
 	gotoxy(0, 0);
 
-	for (const auto& buf : m_buffer)
+	for (const auto& str : m_buffer)
 	{
-		cout << buf << endl;
+		for (const auto& ch : str)
+		{
+			switch (ch)
+			{
+			case '#':
+				textcolor(WHITE);
+				break;
+			case '!':
+				textcolor(RED);
+				break;
+			case '@':
+				textcolor(BLUE);
+				break;
+			}
+
+			cout << ch;
+			textcolor(BLACK);
+		}
+		cout << endl;
 	}		
 }
 
 void GameScene::input()
 {
-	m_player->move(m_gameobjects);
+	m_player->move();
 }
 
 void GameScene::update()
 {
 	//오브젝트를 생성한다
 	//generate_object();
-
-	//오브젝트 업데이트
-	for (auto& monster : m_monsters)
+		
+	for (auto& objects : m_gameobjects)
 	{
-		monster->update();
+		for (auto& object : objects)
+		{
+			object->update();
+		}
 	}
-
 	
-	// 몬스터는 장애물과 플레이어 충돌체크
-	// 플레이어는 장애물과 몬스터 아이템 충돌체크
-
-
-
-
-	// 버퍼에 오브젝트를 넣는다
-
+	// 버퍼를 초기화 후 오브젝트를 넣는다
 	for (auto& buf : m_buffer)
 	{
 		buf.clear();
 		buf.resize(MAX_WIDTH, ' ');
 	}
 
-	for (auto& obstacle : m_obstacles)
+	for (auto& objects : m_gameobjects)
 	{
-		obstacle->insertbuffer(m_buffer);
+		for (auto& object : objects)
+		{
+			object->insertbuffer(m_buffer);
+		}
 	}
-	for (auto& monster : m_monsters)
-	{
-		monster->insertbuffer(m_buffer);
-	}
-	m_player->insertbuffer(m_buffer);
 }
 
 void GameScene::generate_object()
@@ -109,25 +122,51 @@ void GameScene::generate_object()
 
 void GameScene::generate_map()
 {
-	mt19937 gen(rd());
+	mt19937 gen(m_rd());
 
 	uniform_int_distribution<int> width(0, MAX_WIDTH - 1);
 	uniform_int_distribution<int> height(0, MAX_HEIGHT - 1);
 
-	for (int i = 0; i < 10; i++)
+	int cnt = 0;
+
+	while (true)
 	{
-		m_obstacles.push_back(new Object(Point(width(gen), height(gen))));
+		if (cnt > 20)
+			break;
+
+		Point new_pos = Point(width(gen), height(gen));
+
+		if (collision_object(new_pos))
+		{
+			m_gameobjects[OBSTACLE].push_back(make_shared<Object>(new_pos));
+			cnt++;
+		}
 	}
 }
 
 void GameScene::generate_monster()
 {
-	mt19937 gen(rd());
-
+	mt19937 gen(m_rd());
+		
 	uniform_int_distribution<int> width(0, MAX_WIDTH - 1);
 	uniform_int_distribution<int> height(0, MAX_HEIGHT - 1);
 	
-	m_monsters.push_back(new Monster(Point(width(gen), height(gen)), 100, 10, 50, 50));
+	int cnt = 0;
+
+	while (true)
+	{
+		if (cnt > 10)
+			break;
+
+		Point new_pos = Point(width(gen), height(gen));
+
+		if (collision_object(new_pos))
+		{
+			m_gameobjects[MONSTER].push_back(make_shared<Monster>(new_pos, 100, 10, 50, 50));
+			cnt++;
+		}
+	}
+	
 }
 
 void GameScene::generate_item()
@@ -136,12 +175,20 @@ void GameScene::generate_item()
 
 }
 
-bool GameScene::collision_check(Object*& a, Object*& b)
+bool GameScene::collision_object(Point point)
 {
-	if (a->getpoint().x == b->getpoint().x && a->getpoint().y == b->getpoint().y)
-		return true;
+	for (int i = 0; i < 5; i++)
+	{
+		for (auto& object : m_gameobjects[i])
+		{
+			if (object->getpoint() == point)
+			{
+				return false;
+			}
+		}
+	}
 
-	return false;
+	return true;
 }
 
 

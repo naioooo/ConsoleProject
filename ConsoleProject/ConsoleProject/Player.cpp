@@ -15,32 +15,47 @@ Player::~Player()
 {
 }
 
-void Player::move(vector<vector<Object*>>& gameobjects)
+void Player::insertbuffer(vector<string>& buffer)
 {
+	buffer[m_point.y][m_point.x] = '@';
+}
+
+void Player::update()
+{
+}
+
+void Player::move()
+{
+	Point next = m_point;
 
 	if (GetAsyncKeyState(VK_LEFT) & 0x8000) { //왼쪽
-		if (m_point.x > 0)
+		if (next.x > 0)
 		{
-			m_point.x -= m_speed;
+			next.x -= m_speed;
 		}		
 	}
 	if (GetAsyncKeyState(VK_RIGHT) & 0x8000) { //오른쪽		
-		if (m_point.x < MAX_WIDTH - 1 - m_speed)
+		if (next.x < MAX_WIDTH - 1 - m_speed)
 		{
-			m_point.x += m_speed;
+			next.x += m_speed;
 		}
 	}
 	if (GetAsyncKeyState(VK_UP) & 0x8000) { //위
-		if (m_point.y > 0)
+		if (next.y > 0)
 		{
-			m_point.y -= m_speed;
+			next.y -= m_speed;
 		}
 	}
 	if (GetAsyncKeyState(VK_DOWN) & 0x8000) { //아래
-		if (m_point.y < MAX_HEIGHT - 1 - m_speed)
+		if (next.y < MAX_HEIGHT - 1 - m_speed)
 		{
-			m_point.y += m_speed;
+			next.y += m_speed;
 		}
+	}
+
+	if (collision_check(next))
+	{
+		m_point = next;
 	}
 }
 
@@ -48,7 +63,24 @@ void Player::attack()
 {
 }
 
-void Player::insertbuffer(vector<string>& buffer)
+bool Player::collision_check(Point point)
 {
-	buffer[m_point.y][m_point.x] = '@';
+	vector<vector<shared_ptr<Object>>>& gameobjects{ GameScene::m_gameobjects };
+
+	for (int i = 0; i < 5; i++)
+	{
+		if (i != PLAYER)
+		{
+			for (auto& object : gameobjects[i])
+			{
+				if (object->getpoint() == point)
+				{
+					return false;
+				}
+			}
+		}
+	}
+
+	return true;
 }
+
