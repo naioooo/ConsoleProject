@@ -23,7 +23,7 @@ public:
 	int getdefense();
 
 	virtual void insertbuffer(vector<string>& buffer);
-	virtual void update();
+	virtual void update(float elapsedTime);
 
 	virtual void move();
 	virtual void attack();

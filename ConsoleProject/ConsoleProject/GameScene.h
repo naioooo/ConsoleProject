@@ -21,10 +21,12 @@ public:
 	GameScene(Player*& player);
 	~GameScene();
 
-	void loop() override;
+	void loop(float elapsedTime) override;
 	void draw() override;
 	void input() override;
-	void update();
+	void update(float elapsedTime);
+
+	void draw_UI();
 
 	void generate_object();
 	void generate_map();

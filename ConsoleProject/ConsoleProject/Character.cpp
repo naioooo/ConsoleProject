@@ -39,7 +39,7 @@ void Character::insertbuffer(vector<string>& buffer)
 {
 }
 
-void Character::update()
+void Character::update(float elapsedTime)
 {
 }
 

@@ -5,15 +5,16 @@ int main()
 {
 	setconsole();
 
-	DWORD currentTime = GetTickCount64();
+	float currentTime = GetTickCount64();
+	float elapsedTime{};
 
 	GameScene* gamescene = new GameScene();
 	
 	while (true)
 	{
-		if (tick(currentTime))
+		if (tick(currentTime, elapsedTime))
 		{
-			gamescene->loop();
+			gamescene->loop(elapsedTime);
 		}
 	}
 

@@ -23,7 +23,7 @@ using namespace std;
 #define _CRT_SECURE_NO_WARNINGS
 #pragma warning(disable:4996)
 
-#define MAX_WIDTH 50
+#define MAX_WIDTH 60
 #define MAX_HEIGHT 20
 
 enum class NodeState
@@ -72,25 +72,26 @@ enum ColorType
 
 struct Point
 {
-	int x;
-	int y;
+	float x;
+	float y;
 	
 	Point() : x(0), y(0) {};
 	Point(int x, int y) : x(x), y(y) {};
+	Point(float x, float y) : x(x), y(y) {};
 
 	bool operator==(const Point& other) const
 	{
-		return x == other.x && y == other.y;
+		return (int)x == (int)other.x && (int)y == (int)other.y;
 	}
 
 	bool operator!=(const Point& other) const
 	{
-		return !(*this == other);
+		return (int)x != (int)other.x || (int)y != (int)other.y;;
 	}
 
 	bool operator<(const Point& other) const 
 {
-		return x < other.x || (x == other.x && y < other.y);
+		return (int)x < (int)other.x || ((int)x == (int)other.x && (int)y < (int)other.y);
 	}
 };
 
@@ -107,8 +108,10 @@ namespace std {
 void gotoxy(int x, int y);
 void gotoxy(Point p);
 void gotoxy(COORD coord);
-bool tick(DWORD& startTime);
+bool tick(float& startTime, float& elapsedTime);
 void textcolor(int colorNum);
+float distance(Point& a, Point& b);
+float Heuristic(Point a, Point b);
 
 
 void setconsole();

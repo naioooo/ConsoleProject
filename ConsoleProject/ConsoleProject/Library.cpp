@@ -22,12 +22,12 @@ void gotoxy(COORD coord)
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
 }
 
-bool tick(DWORD& startTime)
+bool tick(float& startTime, float& elapsedTime)
 {
-    DWORD currentTime = GetTickCount64();
-    DWORD elapsedTime = currentTime - startTime;
+    float currentTime = GetTickCount64();
+    elapsedTime = currentTime - startTime;
 
-    if (elapsedTime >= 10)
+    if (elapsedTime >= 60)
     {
         startTime = currentTime;
         return true;
@@ -39,6 +39,16 @@ bool tick(DWORD& startTime)
 void textcolor(int colorNum)
 {
     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), colorNum);
+}
+
+float distance(Point& a, Point& b)
+{
+    return sqrt(std::pow(a.x - b.x, 2) + std::pow(a.y - b.y, 2));
+}
+
+float Heuristic(Point a, Point b)
+{
+    return abs(a.x - b.x) + abs(a.y - b.y);
 }
 
 void setconsole()

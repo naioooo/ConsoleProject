@@ -27,6 +27,10 @@ Monster::Monster(const Point point, const int HP, const int speed, const int att
 	m_behaviortree->AddChild(attackSequence);
 	m_behaviortree->AddChild(chaseSequence);
 	m_behaviortree->AddChild(wanderSequence);
+
+	m_detectionRange = 10.0f;
+	m_attackRange = 0.0f;
+	m_chasePoint = Point(0, 0);
 }
 
 Monster::~Monster()
@@ -38,12 +42,22 @@ vector<int> Monster::getpath()
 	return m_path;
 }
 
+Point Monster::getchasePoint()
+{
+	return m_chasePoint;
+}
+
+void Monster::setchasePoint(Point point)
+{
+	m_chasePoint = point;
+}
+
 void Monster::insertbuffer(vector<string>& buffer)
 {
 	buffer[m_point.y][m_point.x] = '!';
 }
 
-void Monster::update()
+void Monster::update(float elapsedTime)
 {
 	auto self = static_pointer_cast<Monster>(shared_from_this());
 	m_behaviortree->Tick(self);
@@ -56,7 +70,7 @@ void Monster::move(const int dir)
 	switch (dir)
 	{
 	case RIGHT:
-		if (next.x < MAX_WIDTH - 2)
+		if (next.x < MAX_WIDTH - 1)
 		{
 			next.x++;
 		}
@@ -74,7 +88,7 @@ void Monster::move(const int dir)
 		}
 		break;
 	case DOWN:
-		if (next.y < MAX_HEIGHT - 2)
+		if (next.y < MAX_HEIGHT - 1)
 		{
 			next.y++;
 		}
@@ -98,7 +112,7 @@ bool Monster::collision_check(Point point)
 {
 	vector<vector<shared_ptr<Object>>>& gameobjects{ GameScene::m_gameobjects };
 	
-	for (int i = 0; i < 5; i++)
+	for (int i = 0; i < 4; i++)
 	{
 		if (i != MONSTER)
 		{
@@ -115,12 +129,6 @@ bool Monster::collision_check(Point point)
 	return true;
 }
 
-// 휴리스틱 함수: 맨해튼 거리
-float Heuristic(Point a, Point b)
-{
-	return abs(a.x - b.x) + abs(a.y - b.y);
-}
-
 bool Monster::IsValidPoint(Point point)
 {
 	if (point.x < 0 || point.x >= MAX_WIDTH || point.y < 0 || point.y >= MAX_HEIGHT)
@@ -130,17 +138,11 @@ bool Monster::IsValidPoint(Point point)
 
 	vector<vector<shared_ptr<Object>>>& gameobjects{ GameScene::m_gameobjects };
 
-	for (int i = 0; i < 5; i++)
+	for (auto& object : gameobjects[OBSTACLE])
 	{
-		if (i != MONSTER && i != PLAYER)
+		if (object->getpoint() == point)
 		{
-			for (auto& object : gameobjects[i])
-			{
-				if (object->getpoint() == point)
-				{
-					return false;
-				}
-			}
+			return false;
 		}
 	}
 
@@ -226,4 +228,96 @@ void Monster::AStar(Point goal)
 	}
 
 	return; 
+}
+
+// 장애물 체크 함수
+bool Monster::isObstacle(int x, int y)
+{
+	vector<vector<shared_ptr<Object>>>& gameobjects{ GameScene::m_gameobjects };
+
+	Point p;
+	p.x = x;
+	p.y = y;
+
+
+	for (auto& object : gameobjects[OBSTACLE])
+	{
+		if (object->getpoint() == p)
+		{
+			return true;
+		}
+	}
+
+	return false;
+}
+
+// 직선이 장애물과 교차하는지 확인
+bool Monster::lineOfSight(const Point& start, const Point& end)
+{
+	int dx = std::abs(end.x - start.x);
+	int dy = std::abs(end.y - start.y);
+	int sx = (start.x < end.x) ? 1 : -1;
+	int sy = (start.y < end.y) ? 1 : -1;
+	int err = dx - dy;
+
+	int x = start.x;
+	int y = start.y;
+
+
+	//gotoxy(100, 25);
+
+	while (true) 
+	{
+		if (isObstacle(x, y))
+		{
+			return false;
+		}
+		if (x == end.x && y == end.y)
+		{
+			return true;
+		}
+
+		int e2 = err * 2;
+
+		if (e2 > -dy)
+		{
+			err -= dy;
+			x += sx;
+		}
+		if (e2 < dx)
+		{
+			err += dx;
+			y += sy;
+		}
+	}
+}
+
+bool Monster::isDetected(Point goal)
+{
+	float dist = distance(m_point, goal);
+
+	if (dist <= m_detectionRange)
+	{
+		if (lineOfSight(m_point, goal))
+		{			
+			return true;
+		}
+	}
+
+	return false;
+}
+
+bool Monster::isAttacked(Point goal)
+{
+	float dist = distance(m_point, goal);
+
+	if (dist <= m_attackRange)
+	{
+		if (lineOfSight(m_point, goal))
+		{
+			return true;
+		}
+	}
+
+	return false;
 }

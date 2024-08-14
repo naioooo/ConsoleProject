@@ -5,7 +5,7 @@ Scene::Scene()
 {
 }
 
-void Scene::loop()
+void Scene::loop(float elapsedTime)
 {
 }
 

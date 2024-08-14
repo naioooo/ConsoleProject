@@ -1,12 +1,13 @@
 #pragma once
 #include "Character.h"
+#include "Bullet.h"
 
 class Player :
 	public Character
 {
 private:
 	string m_name;
-
+	vector<shared_ptr<Bullet>> m_bullets;
 
 public:
 	Player();
@@ -14,8 +15,9 @@ public:
 	~Player();
 
 	void insertbuffer(vector<string>& buffer) override;
-	void update() override;
+	void update(float elapsedTime) override;
 
+	void input();
 	void move() override;
 	void attack() override;
 	bool collision_check(Point point) override;

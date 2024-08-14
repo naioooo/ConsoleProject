@@ -9,6 +9,10 @@ class Monster : public Character
 private:
 	shared_ptr<SelectorNode> m_behaviortree; 
 	vector<int> m_path;
+	float m_detectionRange;
+	float m_attackRange;
+
+	Point m_chasePoint;
 
 public:
 	Monster();
@@ -16,9 +20,12 @@ public:
 	~Monster();
 
 	vector<int> getpath();
+	Point getchasePoint();
+
+	void setchasePoint(Point point);
 
 	void insertbuffer(vector<string>& buffer) override;
-	void update() override;
+	void update(float elapsedTime) override;
 
 	void move(const int dir);
 	void attack() override; 
@@ -26,6 +33,11 @@ public:
 
 	bool IsValidPoint(Point point);
 	void AStar(Point goal);
+
+	bool isObstacle(int x, int y);
+	bool lineOfSight(const Point& start, const Point& end);
+	bool isDetected(Point goal);
+	bool isAttacked(Point goal);
 };
 
 struct Node

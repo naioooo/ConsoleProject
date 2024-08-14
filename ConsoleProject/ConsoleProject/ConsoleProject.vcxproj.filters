@@ -63,6 +63,9 @@
     <ClCompile Include="MonsterBehaviorTree.cpp">
       <Filter>소스 파일\Behavior Tree</Filter>
     </ClCompile>
+    <ClCompile Include="Bullet.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Library.h">
@@ -91,6 +94,9 @@
     </ClInclude>
     <ClInclude Include="MonsterBehaviorTree.h">
       <Filter>헤더 파일\Behavior Tree</Filter>
+    </ClInclude>
+    <ClInclude Include="Bullet.h">
+      <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
