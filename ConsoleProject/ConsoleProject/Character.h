@@ -6,6 +6,7 @@ class Character : public Object
 protected:
 	int m_HP;
 	int m_speed;
+	float m_speed_cnt;
 
 	int m_attack;
 	int m_defense;
@@ -21,6 +22,8 @@ public:
 	int getspeed();
 	int getattack();
 	int getdefense();
+
+	void setHP(int HP);
 
 	virtual void insertbuffer(vector<string>& buffer);
 	virtual void update(float elapsedTime);

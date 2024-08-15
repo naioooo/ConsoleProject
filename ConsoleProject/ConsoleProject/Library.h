@@ -72,12 +72,11 @@ enum ColorType
 
 struct Point
 {
-	float x;
-	float y;
+	int x;
+	int y;
 	
 	Point() : x(0), y(0) {};
 	Point(int x, int y) : x(x), y(y) {};
-	Point(float x, float y) : x(x), y(y) {};
 
 	bool operator==(const Point& other) const
 	{

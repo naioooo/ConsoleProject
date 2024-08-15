@@ -3,14 +3,16 @@
 class Bullet : public Object
 {
 private:
-	int m_speed;
+	float m_speed_cnt;
 	int m_dir;
 	int m_damage;
+
+	int m_lifetime;
 
 
 public:
 	Bullet();
-	Bullet(const Point point, const int speed, const int dir, const int damage);
+	Bullet(const Point point, const int speed, const int dir, const int damage, const int lifetime);
 	~Bullet();
 
 	void insertbuffer(vector<string>& buffer) override;

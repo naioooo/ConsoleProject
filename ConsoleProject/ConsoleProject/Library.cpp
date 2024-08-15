@@ -54,7 +54,7 @@ float Heuristic(Point a, Point b)
 void setconsole()
 {
     system("title shooting game");
-    system("mode con:cols=120 lines=28");
+    system("mode con:cols=130 lines=30");
 
     HANDLE hConsole;
     CONSOLE_CURSOR_INFO ConsoleCursor;

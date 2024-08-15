@@ -5,8 +5,10 @@ Bullet::Bullet()
 {
 }
 
-Bullet::Bullet(const Point point, const int speed, const int dir, const int damage): Object(point), m_speed(speed), m_dir(dir), m_damage(damage)
+Bullet::Bullet(const Point point, const int speed, const int dir, const int damage, const int lifetime)
+	: Object(point), m_speed_cnt(speed), m_dir(dir), m_damage(damage), m_lifetime(lifetime)
 {
+	m_speed_cnt = 0;
 }
 
 Bullet::~Bullet()
@@ -20,7 +22,12 @@ void Bullet::insertbuffer(vector<string>& buffer)
 
 void Bullet::update(float elapsedTime)
 {
-	move(elapsedTime);
+	m_speed_cnt += elapsedTime;
+	if (m_speed_cnt > 120.0f)
+	{
+		move(elapsedTime);
+		m_speed_cnt = 0.0f;
+	}
 }
 
 void Bullet::move(float elapsedTime)
@@ -32,25 +39,25 @@ void Bullet::move(float elapsedTime)
 	case RIGHT:
 		if (next.x < MAX_WIDTH)
 		{
-			next.x += m_speed * elapsedTime * 0.001f;
+			next.x ++;
 		}
 		break;
 	case LEFT:
 		if (next.x >= 0)
 		{
-			next.x -= m_speed * elapsedTime * 0.001f;
+			next.x--;
 		}
 		break;
 	case UP:
 		if (next.y >= 0)
 		{
-			next.y -= m_speed * elapsedTime * 0.001f;
+			next.y --;
 		}
 		break;
 	case DOWN:
 		if (next.y < MAX_HEIGHT)
 		{
-			next.y += m_speed * elapsedTime * 0.001f;
+			next.y ++;
 		}
 		break;
 
@@ -89,7 +96,8 @@ bool Bullet::collision_check(Point point)
 	{
 		if (object->getpoint() == point)
 		{
-			object->setalive(false);
+			shared_ptr<Monster> monster = dynamic_pointer_cast<Monster>(object);
+			monster->setHP(monster->getHP() - m_damage);
 			return false;
 		}
 	}

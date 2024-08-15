@@ -8,6 +8,8 @@ class Player :
 private:
 	string m_name;
 	vector<shared_ptr<Bullet>> m_bullets;
+	unsigned int m_money;
+
 
 public:
 	Player();
@@ -16,6 +18,9 @@ public:
 
 	void insertbuffer(vector<string>& buffer) override;
 	void update(float elapsedTime) override;
+
+	unsigned int getmoney();
+	void setmoney(const unsigned int money);
 
 	void input();
 	void move() override;

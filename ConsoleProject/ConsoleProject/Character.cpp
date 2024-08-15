@@ -35,6 +35,15 @@ int Character::getdefense()
 	return m_defense;
 }
 
+void Character::setHP(int HP)
+{
+	m_HP = HP;
+	if (m_HP <= 0)
+	{
+		setalive(false);
+	}
+}
+
 void Character::insertbuffer(vector<string>& buffer)
 {
 }

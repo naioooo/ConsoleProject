@@ -55,6 +55,10 @@ NodeState ChaseActionNode::Tick(shared_ptr<Monster>& owner)
 NodeState AttackActionNode::Tick(shared_ptr<Monster>& owner)
 {
     // 플레이어를 공격하는 로직을 구현합니다.
+    vector<vector<shared_ptr<Object>>> gameobjects = GameScene::m_gameobjects;
+    shared_ptr<Player> player = dynamic_pointer_cast<Player>(gameobjects[PLAYER][0]);
+    //player->setHP(player->getHP() - 1);
+
     return NodeState::Success; // 공격 완료
 }
 

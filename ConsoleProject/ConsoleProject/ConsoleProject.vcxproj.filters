@@ -16,12 +16,6 @@
     <Filter Include="소스 파일\Scene">
       <UniqueIdentifier>{91f3a3b8-5619-4463-8870-49f5fbb83ecf}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\Character">
-      <UniqueIdentifier>{5a8f9ecc-a6d6-4196-a787-751379f1c4d4}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="헤더 파일\Character">
-      <UniqueIdentifier>{652cfaad-c398-4a60-ad47-c7a6606d8c4e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="헤더 파일\Scene">
       <UniqueIdentifier>{7e8288a9-faba-4b35-9529-3ef593fbf6cf}</UniqueIdentifier>
     </Filter>
@@ -30,6 +24,18 @@
     </Filter>
     <Filter Include="헤더 파일\Behavior Tree">
       <UniqueIdentifier>{496d7480-22f5-4aaf-8eee-9370258db71b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\Object">
+      <UniqueIdentifier>{da5f07b1-00a0-4494-8d29-d90c7d7cd201}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\Object\Character">
+      <UniqueIdentifier>{652cfaad-c398-4a60-ad47-c7a6606d8c4e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Object">
+      <UniqueIdentifier>{560c7c62-97d7-4607-a57b-f37a90da9340}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Object\Character">
+      <UniqueIdentifier>{5a8f9ecc-a6d6-4196-a787-751379f1c4d4}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -43,19 +49,16 @@
       <Filter>소스 파일\Scene</Filter>
     </ClCompile>
     <ClCompile Include="Character.cpp">
-      <Filter>소스 파일\Character</Filter>
+      <Filter>소스 파일\Object\Character</Filter>
     </ClCompile>
     <ClCompile Include="Player.cpp">
-      <Filter>소스 파일\Character</Filter>
-    </ClCompile>
-    <ClCompile Include="Object.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>소스 파일\Object\Character</Filter>
     </ClCompile>
     <ClCompile Include="Library.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="Monster.cpp">
-      <Filter>소스 파일\Character</Filter>
+      <Filter>소스 파일\Object\Character</Filter>
     </ClCompile>
     <ClCompile Include="Node.cpp">
       <Filter>소스 파일\Behavior Tree</Filter>
@@ -64,7 +67,10 @@
       <Filter>소스 파일\Behavior Tree</Filter>
     </ClCompile>
     <ClCompile Include="Bullet.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>소스 파일\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Object.cpp">
+      <Filter>소스 파일\Object</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -72,10 +78,10 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Character.h">
-      <Filter>헤더 파일\Character</Filter>
+      <Filter>헤더 파일\Object\Character</Filter>
     </ClInclude>
     <ClInclude Include="Player.h">
-      <Filter>헤더 파일\Character</Filter>
+      <Filter>헤더 파일\Object\Character</Filter>
     </ClInclude>
     <ClInclude Include="GameScene.h">
       <Filter>헤더 파일\Scene</Filter>
@@ -83,11 +89,8 @@
     <ClInclude Include="Scene.h">
       <Filter>헤더 파일\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="Object.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="Monster.h">
-      <Filter>헤더 파일\Character</Filter>
+      <Filter>헤더 파일\Object\Character</Filter>
     </ClInclude>
     <ClInclude Include="Node.h">
       <Filter>헤더 파일\Behavior Tree</Filter>
@@ -96,7 +99,10 @@
       <Filter>헤더 파일\Behavior Tree</Filter>
     </ClInclude>
     <ClInclude Include="Bullet.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>헤더 파일\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Object.h">
+      <Filter>헤더 파일\Object</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

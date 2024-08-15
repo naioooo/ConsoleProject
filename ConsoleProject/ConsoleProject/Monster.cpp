@@ -29,8 +29,9 @@ Monster::Monster(const Point point, const int HP, const int speed, const int att
 	m_behaviortree->AddChild(wanderSequence);
 
 	m_detectionRange = 10.0f;
-	m_attackRange = 0.0f;
+	m_attackRange = 1.0f;
 	m_chasePoint = Point(0, 0);
+	m_speed_cnt = 0.0f;
 }
 
 Monster::~Monster()
@@ -59,8 +60,14 @@ void Monster::insertbuffer(vector<string>& buffer)
 
 void Monster::update(float elapsedTime)
 {
-	auto self = static_pointer_cast<Monster>(shared_from_this());
-	m_behaviortree->Tick(self);
+	m_speed_cnt += elapsedTime;
+
+	if (m_speed_cnt > m_speed)
+	{
+		auto self = static_pointer_cast<Monster>(shared_from_this());
+		m_behaviortree->Tick(self);
+		m_speed_cnt = 0.0f;
+	}
 }
 
 void Monster::move(const int dir)

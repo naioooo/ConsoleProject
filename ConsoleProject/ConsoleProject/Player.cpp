@@ -9,6 +9,7 @@ Player::Player()
 Player::Player(const Point point, const int HP, const int speed, const int attack, const int defense, const string& name)
 	: Character(point, HP, speed, attack, defense), m_name(name)
 {
+	m_money = 1000;
 }
 
 Player::~Player()
@@ -17,8 +18,6 @@ Player::~Player()
 
 void Player::insertbuffer(vector<string>& buffer)
 {
-	buffer[m_point.y][m_point.x] = '@';
-
 	for (auto& bullet : m_bullets)
 	{
 		if (bullet->getalive())
@@ -26,6 +25,8 @@ void Player::insertbuffer(vector<string>& buffer)
 			bullet->insertbuffer(buffer);
 		}
 	}
+
+	buffer[m_point.y][m_point.x] = '@';
 }
 
 void Player::update(float elapsedTime)
@@ -41,6 +42,16 @@ void Player::update(float elapsedTime)
 		});
 
 	m_bullets.erase(newEnd, m_bullets.end());
+}
+
+unsigned int Player::getmoney()
+{
+	return m_money;
+}
+
+void Player::setmoney(const unsigned int money)
+{
+	m_money = money;
 }
 
 void Player::input()
@@ -71,20 +82,20 @@ void Player::input()
 			switch (m_dir)
 			{
 			case LEFT:
-				//bullet_pos.x -= 1;
+				bullet_pos.x -= 1;
 				break;
 			case RIGHT:
 				bullet_pos.x += 1;
 				break;
 			case UP:
-				//bullet_pos.y -= 1;
+				bullet_pos.y -= 1;
 				break;
 			case DOWN:
 				bullet_pos.y += 1;
 				break;
 			}
 
-			shared_ptr<Bullet> bullet = make_shared<Bullet>(bullet_pos, 5, m_dir, 10);
+			shared_ptr<Bullet> bullet = make_shared<Bullet>(m_point, 5, m_dir, 10, 10);
 			m_bullets.push_back(bullet);
 		}
 	}
@@ -103,7 +114,7 @@ void Player::move()
 		}
 		break;
 	case RIGHT:
-		if (next.x < MAX_WIDTH - m_speed)
+		if (next.x < MAX_WIDTH - 1)
 		{
 			next.x += m_speed;
 		}
@@ -115,7 +126,7 @@ void Player::move()
 		}
 		break;
 	case DOWN:
-		if (next.y < MAX_HEIGHT - m_speed)
+		if (next.y < MAX_HEIGHT - 1)
 		{
 			next.y += m_speed;
 		}
