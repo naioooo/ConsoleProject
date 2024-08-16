@@ -2,6 +2,7 @@
 #include "Scene.h"
 #include "Player.h"
 #include "Monster.h"
+#include "StageManager.h"
 
 class GameScene :
     public Scene
@@ -11,6 +12,8 @@ public:
 
 private:
 	shared_ptr<Player> m_player;
+	shared_ptr<StageManager> m_stagemanager;
+
 	vector<string> m_buffer;
 
 	random_device m_rd;
@@ -18,7 +21,6 @@ private:
 
 public:
 	GameScene();
-	GameScene(Player*& player);
 	~GameScene();
 
 	void loop(float elapsedTime) override;
@@ -28,10 +30,4 @@ public:
 
 	void draw_UI();
 
-	void generate_object();
-	void generate_map();
-	void generate_monster();
-	void generate_item();
-
-	bool collision_object(Point point);
 };

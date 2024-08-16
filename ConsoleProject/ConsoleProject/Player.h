@@ -10,6 +10,9 @@ private:
 	vector<shared_ptr<Bullet>> m_bullets;
 	unsigned int m_money;
 
+	vector<int> m_skill_cnt;
+	int m_reload_cnt;	
+	int m_kill_cnt;
 
 public:
 	Player();
@@ -20,7 +23,11 @@ public:
 	void update(float elapsedTime) override;
 
 	unsigned int getmoney();
+	int getkill_cnt();
+	vector<int> getskill_cnt();
+
 	void setmoney(const unsigned int money);
+	void setkill_cnt(const int kill_cnt);
 
 	void input();
 	void move() override;

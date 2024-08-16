@@ -14,6 +14,8 @@ private:
 
 	Point m_chasePoint;
 
+	int m_state;
+
 public:
 	Monster();
 	Monster(const Point point, const int HP, const int speed, const int attack, const int defense);
@@ -23,6 +25,7 @@ public:
 	Point getchasePoint();
 
 	void setchasePoint(Point point);
+	void setstate(int state);
 
 	void insertbuffer(vector<string>& buffer) override;
 	void update(float elapsedTime) override;

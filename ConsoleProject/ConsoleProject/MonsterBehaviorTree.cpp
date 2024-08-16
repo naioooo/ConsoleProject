@@ -49,6 +49,7 @@ NodeState ChaseActionNode::Tick(shared_ptr<Monster>& owner)
     owner->AStar(gameobjects[PLAYER][0]->getpoint());
     owner->move(owner->getpath()[0]);
 
+    owner->setstate(CHASE);
     return NodeState::Running; // 추적 중이므로 Running 상태를 반환
 }
 
@@ -59,6 +60,7 @@ NodeState AttackActionNode::Tick(shared_ptr<Monster>& owner)
     shared_ptr<Player> player = dynamic_pointer_cast<Player>(gameobjects[PLAYER][0]);
     //player->setHP(player->getHP() - 1);
 
+    owner->setstate(ATTACK);
     return NodeState::Success; // 공격 완료
 }
 
@@ -72,5 +74,6 @@ NodeState WanderActionNode::Tick(shared_ptr<Monster>& owner)
 
     owner->move(dir(gen));
 
+    owner->setstate(WANDER);
     return NodeState::Running; // 배회 중이므로 Running 상태를 반환
 }

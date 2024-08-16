@@ -8,6 +8,7 @@ private:
 	int m_damage;
 
 	int m_lifetime;
+	int m_lifetime_cnt;
 
 
 public:

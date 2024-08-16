@@ -1,6 +1,10 @@
 #pragma once
 #include "Player.h"
 #include "GameScene.h"
+#include "Item.h"
+#include "HPUP.h"
+#include "AttackUP.h"
+#include "Money.h"
 
 Player::Player()
 {
@@ -10,6 +14,8 @@ Player::Player(const Point point, const int HP, const int speed, const int attac
 	: Character(point, HP, speed, attack, defense), m_name(name)
 {
 	m_money = 1000;
+	m_skill_cnt = {5, 5, 5};
+	m_kill_cnt = 0;
 }
 
 Player::~Player()
@@ -26,7 +32,7 @@ void Player::insertbuffer(vector<string>& buffer)
 		}
 	}
 
-	buffer[m_point.y][m_point.x] = '@';
+	buffer[m_point.y][m_point.x] = CH_PLAYER;
 }
 
 void Player::update(float elapsedTime)
@@ -49,9 +55,24 @@ unsigned int Player::getmoney()
 	return m_money;
 }
 
+int Player::getkill_cnt()
+{
+	return m_kill_cnt;
+}
+
+vector<int> Player::getskill_cnt()
+{
+	return m_skill_cnt;
+}
+
 void Player::setmoney(const unsigned int money)
 {
 	m_money = money;
+}
+
+void Player::setkill_cnt(const int kill_cnt)
+{
+	m_kill_cnt = kill_cnt;
 }
 
 void Player::input()
@@ -73,7 +94,7 @@ void Player::input()
 		move();
 	}
 
-	if (GetAsyncKeyState(VK_CONTROL) & 0x8001)
+	if (GetAsyncKeyState(VK_CONTROL) & 0x8000)
 	{
 		if (m_dir != 0)
 		{
@@ -97,6 +118,101 @@ void Player::input()
 
 			shared_ptr<Bullet> bullet = make_shared<Bullet>(m_point, 5, m_dir, 10, 10);
 			m_bullets.push_back(bullet);
+		}
+	}
+	else if (GetAsyncKeyState('A') & 0x8000)
+	{
+		if (m_skill_cnt[0] > 0 && m_HP < 30)
+		{
+			m_HP++;
+			if (m_HP > 30)
+			{
+				m_HP = 30;
+			}
+
+			m_skill_cnt[0]--;
+		}
+	}
+	else if (GetAsyncKeyState('S') & 0x8000)
+	{
+		if (m_skill_cnt[1] > 0)
+		{
+			for (int dir = LEFT; dir <= RIGHTDOWN; dir++)
+			{
+				shared_ptr<Bullet> bullet = make_shared<Bullet>(m_point, 5, dir, 10, 3);
+				m_bullets.push_back(bullet);
+			}
+			m_skill_cnt[1]--;
+		}
+	}
+	else if (GetAsyncKeyState('D') & 0x8000 && m_dir != 0)
+	{
+		if (m_skill_cnt[2] > 0)
+		{
+			Point bullet_pos = m_point;
+
+			while (true)
+			{
+				switch (m_dir)
+				{
+				case LEFT:
+					bullet_pos.x -= 1;
+					break;
+				case RIGHT:
+					bullet_pos.x += 1;
+					break;
+				case UP:
+					bullet_pos.y -= 1;
+					break;
+				case DOWN:
+					bullet_pos.y += 1;
+					break;
+				}
+
+				if (!collision_check(bullet_pos))
+				{
+					break;
+				}
+
+				shared_ptr<Bullet> bullet = make_shared<Bullet>(bullet_pos, 5, m_dir, 10, 1);
+				m_bullets.push_back(bullet);
+			}
+
+			m_skill_cnt[2]--;
+		}		
+	}
+
+	if (GetAsyncKeyState('Q') & 0x8000)
+	{
+		if (m_money >= 1000)
+		{
+			m_money -= 1000;
+			m_skill_cnt[0]++;
+
+			if (m_skill_cnt[0] > 9)
+				m_skill_cnt[0] = 9;
+		}
+	}
+	else if (GetAsyncKeyState('W') & 0x8000)
+	{
+		if (m_money >= 1000)
+		{
+			m_money -= 1000;
+			m_skill_cnt[1]++;
+
+			if (m_skill_cnt[1] > 9)
+				m_skill_cnt[1] = 9;
+		}
+	}
+	else if (GetAsyncKeyState('E') & 0x8000)
+	{
+		if (m_money >= 1000)
+		{
+			m_money -= 1000;
+			m_skill_cnt[2]++;
+
+			if (m_skill_cnt[2] > 9)
+				m_skill_cnt[2] = 9;
 		}
 	}
 }
@@ -131,7 +247,6 @@ void Player::move()
 			next.y += m_speed;
 		}
 		break;
-
 	default:
 		break;
 	}
@@ -148,19 +263,63 @@ void Player::attack()
 
 bool Player::collision_check(Point point)
 {
+	if (point.x < 0 || point.x >= MAX_WIDTH || point.y < 0 || point.y >= MAX_HEIGHT)
+	{
+		return false;
+	}
+
 	vector<vector<shared_ptr<Object>>>& gameobjects{ GameScene::m_gameobjects };
 
-	for (int i = 0; i < 4; i++)
+	for (auto& object : gameobjects[OBSTACLE])
 	{
-		if (i != PLAYER)
+		if (object->getpoint() == point)
 		{
-			for (auto& object : gameobjects[i])
+			return false;
+		}
+	}
+	for (auto& object : gameobjects[MONSTER])
+	{
+		if (object->getpoint() == point)
+		{
+			return false;
+		}
+	}
+	for (auto& object : gameobjects[ITEM])
+	{
+		if (object->getpoint() == point)
+		{
+			shared_ptr<Item> item = dynamic_pointer_cast<Item>(object);
+			string name = item->getname();
+
+			if (name == "A")
 			{
-				if (object->getpoint() == point)
+				shared_ptr<AttackUP> attackUP = dynamic_pointer_cast<AttackUP>(item);
+				m_attack += attackUP->getAttackUP(); 
+				if (m_attack > 9999)
 				{
-					return false;
+					m_attack = 9999;
 				}
 			}
+			else if (name == "H")
+			{
+				shared_ptr<HpUP> hpUP = dynamic_pointer_cast<HpUP>(item);
+				m_HP += hpUP->getHpUP();
+				if (m_HP > 30)
+				{
+					m_HP = 30;
+				}
+			}
+			else if (name == "M")
+			{
+				shared_ptr<Money> money = dynamic_pointer_cast<Money>(item);
+				m_money += money->getmoney();
+				if (m_money > 99999)
+				{
+					m_money = 99999;
+				}
+			}
+
+			item->setalive(false);
 		}
 	}
 

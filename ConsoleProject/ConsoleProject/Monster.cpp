@@ -32,6 +32,7 @@ Monster::Monster(const Point point, const int HP, const int speed, const int att
 	m_attackRange = 1.0f;
 	m_chasePoint = Point(0, 0);
 	m_speed_cnt = 0.0f;
+	m_state = WANDER;
 }
 
 Monster::~Monster()
@@ -53,9 +54,25 @@ void Monster::setchasePoint(Point point)
 	m_chasePoint = point;
 }
 
+void Monster::setstate(int state)
+{
+	m_state = state;
+}
+
 void Monster::insertbuffer(vector<string>& buffer)
 {
-	buffer[m_point.y][m_point.x] = '!';
+	if (m_state == WANDER)
+	{
+		buffer[m_point.y][m_point.x] = CH_MONSTER1;
+	}
+	else if (m_state == CHASE)
+	{
+		buffer[m_point.y][m_point.x] = CH_MONSTER2;
+	}
+	else if (m_state == ATTACK)
+	{
+		buffer[m_point.y][m_point.x] = CH_MONSTER3;
+	}
 }
 
 void Monster::update(float elapsedTime)
@@ -117,19 +134,25 @@ void Monster::attack()
 
 bool Monster::collision_check(Point point)
 {
+	if (point.x < 0 || point.x >= MAX_WIDTH || point.y < 0 || point.y >= MAX_HEIGHT)
+	{
+		return false;
+	}
+
 	vector<vector<shared_ptr<Object>>>& gameobjects{ GameScene::m_gameobjects };
 	
-	for (int i = 0; i < 4; i++)
+	for (auto& object : gameobjects[OBSTACLE])
 	{
-		if (i != MONSTER)
+		if (object->getpoint() == point)
 		{
-			for (auto& object : gameobjects[i])
-			{
-				if (object->getpoint() == point)
-				{
-					return false;
-				}
-			}
+			return false;
+		}
+	}
+	for (auto& object : gameobjects[PLAYER])
+	{
+		if (object->getpoint() == point)
+		{
+			return false;
 		}
 	}
 

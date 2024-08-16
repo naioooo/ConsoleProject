@@ -37,6 +37,18 @@
     <Filter Include="소스 파일\Object\Character">
       <UniqueIdentifier>{5a8f9ecc-a6d6-4196-a787-751379f1c4d4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="헤더 파일\Object\Item">
+      <UniqueIdentifier>{76d568f5-6f06-46e5-b6e9-68fa0ea3debb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Object\Item">
+      <UniqueIdentifier>{2021cb65-256d-45d4-a038-5ed23801f58c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Stage">
+      <UniqueIdentifier>{430be4ba-62e0-4a8e-8d64-1ebf4a4e2dc1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="헤더 파일\Stage">
+      <UniqueIdentifier>{e9d1b269-18de-4414-b435-169565efe5ab}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -72,6 +84,30 @@
     <ClCompile Include="Object.cpp">
       <Filter>소스 파일\Object</Filter>
     </ClCompile>
+    <ClCompile Include="Money.cpp">
+      <Filter>소스 파일\Object\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="Item.cpp">
+      <Filter>소스 파일\Object\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="HPUP.cpp">
+      <Filter>소스 파일\Object\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="AttackUP.cpp">
+      <Filter>소스 파일\Object\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="NormalStage.cpp">
+      <Filter>소스 파일\Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage.cpp">
+      <Filter>소스 파일\Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="BossStage.cpp">
+      <Filter>소스 파일\Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="StageManager.cpp">
+      <Filter>소스 파일\Stage</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Library.h">
@@ -103,6 +139,30 @@
     </ClInclude>
     <ClInclude Include="Object.h">
       <Filter>헤더 파일\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Item.h">
+      <Filter>헤더 파일\Object\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="Money.h">
+      <Filter>헤더 파일\Object\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="HPUP.h">
+      <Filter>헤더 파일\Object\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="AttackUP.h">
+      <Filter>헤더 파일\Object\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="NormalStage.h">
+      <Filter>헤더 파일\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage.h">
+      <Filter>헤더 파일\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="BossStage.h">
+      <Filter>헤더 파일\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="StageManager.h">
+      <Filter>헤더 파일\Stage</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

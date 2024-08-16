@@ -30,7 +30,7 @@ void Object::setalive(bool alive)
 
 void Object::insertbuffer(vector<string>& buffer)
 {
-    buffer[m_point.y][m_point.x] = '#';
+    buffer[m_point.y][m_point.x] = CH_OBSTACLE;
 }
 
 void Object::update(float elapsedTime)

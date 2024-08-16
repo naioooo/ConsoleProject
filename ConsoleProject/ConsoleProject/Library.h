@@ -26,6 +26,16 @@ using namespace std;
 #define MAX_WIDTH 60
 #define MAX_HEIGHT 20
 
+#define CH_OBSTACLE '@'
+#define CH_MONSTER1 '#'
+#define CH_MONSTER2 '!'
+#define CH_MONSTER3 '^'
+#define CH_PLAYER 'O'
+#define CH_BULLET '*'
+#define CH_HPUP '+'
+#define CH_ATTACKUP 'A'
+#define CH_MONEY '$'
+
 enum class NodeState
 {
 	Success,
@@ -33,18 +43,29 @@ enum class NodeState
 	Running
 };
 
+enum State
+{
+	WANDER,
+	CHASE,
+	ATTACK
+};
+
 enum DIR
 {
 	LEFT = 1,
 	RIGHT,
 	UP,
-	DOWN
+	DOWN,
+	LEFTUP,
+	RIGHTUP,
+	LEFTDOWN,
+	RIGHTDOWN
 };
 
 enum OBJECT
 {
 	OBSTACLE,
-	MONSTER,
+	MONSTER, 
 	ITEM,
 	PLAYER,
 	BULLET
