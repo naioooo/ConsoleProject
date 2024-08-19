@@ -4,6 +4,14 @@
 vector<vector<shared_ptr<Object>>> GameScene::m_gameobjects{};
 
 GameScene::GameScene()
+{	
+}
+
+GameScene::~GameScene()
+{
+}
+
+void GameScene::Enter()
 {
 	string str;
 	str.resize(MAX_WIDTH, ' ');
@@ -13,31 +21,48 @@ GameScene::GameScene()
 		m_buffer.push_back(str);
 	}
 
-	m_generate_tick = 0;
-
 	m_gameobjects.resize(4);
-	m_gameobjects[PLAYER].push_back(make_shared <Player>(Point(10, 10), 30, 1, 50, 50, "호날두"));
+	m_gameobjects[PLAYER].push_back(make_shared <Player>(Point(MAX_WIDTH / 2, MAX_HEIGHT / 2), 30, 1, 50, 50, "호날두"));
 	m_player = dynamic_pointer_cast<Player>(m_gameobjects[PLAYER][0]);
 
-	draw_UI();
+	DrawUI();
 
-	m_stagemanager = make_shared<StageManager>();
-	m_stagemanager->EnterStage();
+	m_stageManager = make_shared<StageManager>();
+	m_stageManager->EnterStage();
 }
 
-GameScene::~GameScene()
+void GameScene::Exit()
 {
+	system("cls");
+
+	for (auto& buf : m_buffer)
+	{
+		buf.clear();
+		buf.shrink_to_fit();
+	}
+	m_buffer.clear();
+	m_buffer.shrink_to_fit();
+
+	for (auto& object : m_gameobjects)
+	{
+		object.clear();
+		object.shrink_to_fit();
+	}
+	m_gameobjects.clear();
+	m_gameobjects.shrink_to_fit();
+
+	m_stageManager = nullptr;
 }
 
-void GameScene::loop(float elapsedTime)
+void GameScene::Update(float elapsedTime)
 {
-	input();
-	m_stagemanager->UpdateStage(elapsedTime);
-	//update(elapsedTime);
-	draw();
+	Input();
+	m_stageManager->UpdateStage(elapsedTime);
+	Draw();
+	ChangeScene();
 }
 
-void GameScene::draw()
+void GameScene::Draw()
 {
 	// 버퍼를 초기화 후 오브젝트를 넣는다
 	for (auto& buf : m_buffer)
@@ -50,9 +75,9 @@ void GameScene::draw()
 	{
 		for (auto& object : objects)
 		{
-			if (object->getalive())
+			if (object->GetAlive())
 			{
-				object->insertbuffer(m_buffer);
+				object->InsertBuffer(m_buffer);
 			}
 		}
 	}
@@ -72,10 +97,18 @@ void GameScene::draw()
 			case CH_OBSTACLE:
 				textcolor(WHITE);
 				break;
+			case CH_FIREBALL:
+				textcolor(DarkGray);
+				break;
 			case CH_MONSTER1:
 			case CH_MONSTER2:
 			case CH_MONSTER3:
 				textcolor(DarkRed);
+				break;
+			case CH_BOSS1:
+			case CH_BOSS2:
+			case CH_BOSS3:
+				textcolor(DarkPurple);
 				break;
 			case CH_PLAYER:
 				textcolor(BLUE);
@@ -92,6 +125,8 @@ void GameScene::draw()
 			case CH_ATTACKUP:
 				textcolor(PURPLE);
 				break;
+
+
 			}
 
 			cout << ch;
@@ -109,9 +144,16 @@ void GameScene::draw()
 	cout << "HP : ";
 	for (int i = 0; i < 30; i++)
 	{
-		if (i < m_player->getHP())
+		if (m_player != nullptr)
 		{
-			cout << "▒";
+			if (i < m_player->GetHP())
+			{
+				cout << "▒";
+			}
+			else
+			{
+				cout << " ";
+			}
 		}
 		else
 		{
@@ -123,7 +165,11 @@ void GameScene::draw()
 	gotoxy(x, y);
 	textcolor(YELLOW);
 	cout << "MONEY : "; 
-	str = to_string(m_player->getmoney());
+	str = "";
+	if (m_player != nullptr)
+	{
+		str = to_string(m_player->GetMoney());
+	}
 	for (int i = 0; i < 5; i++)
 	{
 		if (i < str.length())
@@ -140,7 +186,11 @@ void GameScene::draw()
 	gotoxy(x, y);
 	textcolor(YELLOW);
 	cout << "ATTACK : ";
-	str = to_string(m_player->getattack());
+	str = "";
+	if (m_player != nullptr)
+	{
+		str = to_string(m_player->GetAttack());
+	}
 	for (int i = 0; i < 4; i++)
 	{
 		if (i < str.length())
@@ -157,20 +207,56 @@ void GameScene::draw()
 	gotoxy(x, y);
 	textcolor(YELLOW);
 
-	cout << "KILL COUNT : ";
-	str = to_string(m_player->getkill_cnt());
-	for (int i = 0; i < 2; i++)
+	int idx = m_stageManager->GetCurrentStageIndex();
+
+	if (idx == 3)
 	{
-		if (i < str.length())
+		cout << "BOSS HP : ";
+		if (!m_gameobjects[MONSTER].empty())
 		{
-			cout << str[i];
+			shared_ptr<BossMonster> boss = dynamic_pointer_cast<BossMonster> (m_gameobjects[MONSTER][0]);
+
+			for (int i = 0; i < 30; i++)
+			{
+				if (i < boss->GetHP())
+				{
+					cout << "▒";
+				}
+				else
+				{
+					cout << " ";
+				}
+			}
 		}
 		else
 		{
-			cout << " ";
+			for (int i = 0; i < 30; i++)
+			{
+				cout << " ";
+			}
 		}
 	}
-	cout << " / " << (m_stagemanager->getcurrentStageIndex() + 1) * 10;
+	else
+	{
+		cout << "KILL COUNT : ";
+		str = "";
+		if (m_player != nullptr)
+		{
+			str = to_string(m_player->GetKillCnt());
+		}
+		for (int i = 0; i < 2; i++)
+		{
+			if (i < str.length())
+			{
+				cout << str[i];
+			}
+			else
+			{
+				cout << " ";
+			}
+		}
+		cout << " / " << (m_stageManager->GetCurrentStageIndex() + 1) * 10;
+	}
 
 	
 
@@ -227,7 +313,11 @@ void GameScene::draw()
 
 	x += 9;
 	gotoxy(x, y);
-	str = to_string(m_player->getskill_cnt()[0]);
+	str = "";
+	if (m_player != nullptr)
+	{
+		str = to_string(m_player->GetSkillCnt()[0]);
+	}
 	for (int i = 0; i < 2; i++)
 	{
 		if (i < str.length())
@@ -242,7 +332,11 @@ void GameScene::draw()
 
 	x += 9;
 	gotoxy(x, y);
-	str = to_string(m_player->getskill_cnt()[1]);
+	str = "";
+	if (m_player != nullptr)
+	{
+		str = to_string(m_player->GetSkillCnt()[1]);
+	}
 	for (int i = 0; i < 2; i++)
 	{
 		if (i < str.length())
@@ -257,7 +351,11 @@ void GameScene::draw()
 
 	x += 12;
 	gotoxy(x, y);
-	str = to_string(m_player->getskill_cnt()[2]);
+	str = "";
+	if (m_player != nullptr)
+	{
+		str = to_string(m_player->GetSkillCnt()[2]);
+	}
 	for (int i = 0; i < 2; i++)
 	{
 		if (i < str.length())
@@ -271,7 +369,7 @@ void GameScene::draw()
 	}
 }
 
-void GameScene::draw_UI()
+void GameScene::DrawUI()
 {
 	string s1 = "┌";
 	string s2 = "┐";
@@ -355,13 +453,20 @@ void GameScene::draw_UI()
 	
 }
 
-void GameScene::input()
+void GameScene::Input()
 {
-	m_player->input();
+	m_player->Input();
 }
 
-void GameScene::update(float elapsedTime)
+void GameScene::ChangeScene()
 {
+	if (m_stageManager->GetCurrentStageIndex() == m_stageManager->GetStagesSize())
+		SceneManager::Instance().ChangeScene("Ending");
+	if (!m_player->GetAlive())
+		SceneManager::Instance().ChangeScene("Title");
+
 }
+
+
 
 

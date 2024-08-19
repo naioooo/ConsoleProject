@@ -11,9 +11,9 @@ public:
     HpUP(const Point point, const int lifetime, const int HpUP);
     ~HpUP();
 
-    int getHpUP();
+    int GetHpUP();
 
-    void insertbuffer(vector<string>& buffer) override;
-    void update(float elapsedTime) override;
+    void InsertBuffer(vector<string>& buffer) override;
+    void Update(float elapsedTime) override;
 };
 

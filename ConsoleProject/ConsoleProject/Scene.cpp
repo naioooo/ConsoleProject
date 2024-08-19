@@ -5,14 +5,14 @@ Scene::Scene()
 {
 }
 
-void Scene::loop(float elapsedTime)
+void Scene::Update(float elapsedTime)
 {
 }
 
-void Scene::draw()
+void Scene::Draw()
 {
 }
 
-void Scene::input()
+void Scene::Input()
 {
 }

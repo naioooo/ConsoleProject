@@ -65,3 +65,8 @@ void setconsole()
 
     SetConsoleCursorInfo(hConsole, &ConsoleCursor);
 }
+
+float Node::fCost() const
+{
+    return gCost + hCost; 
+}

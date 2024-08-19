@@ -14,17 +14,17 @@ AttackUP::~AttackUP()
 {
 }
 
-int AttackUP::getAttackUP()
+int AttackUP::GetAttackUP()
 {
 	return m_AttackUP;
 }
 
-void AttackUP::insertbuffer(vector<string>& buffer)
+void AttackUP::InsertBuffer(vector<string>& buffer)
 {
 	buffer[m_point.y][m_point.x] = CH_ATTACKUP;
 }
 
-void AttackUP::update(float elapsedTime)
+void AttackUP::Update(float elapsedTime)
 {
-	Item::update(elapsedTime);
+	Item::Update(elapsedTime);
 }

@@ -1,41 +1,38 @@
 #pragma once
 #include "Node.h"
 
-class IsPlayerDetectedCondition : public BehaviorTreeNode 
+class Boss_IsPlayerInAttackRangeCondition : public BehaviorTreeNode
 {
 public:
     NodeState Tick(shared_ptr<Monster>& owner) override;
 };
 
-class IsPlayerInAttackRangeCondition : public BehaviorTreeNode
+class Boss_IsPlayerDetectedCondition : public BehaviorTreeNode
 {
 public:
     NodeState Tick(shared_ptr<Monster>& owner) override;
 };
 
-class IsPlayerNotDetectedCondition : public BehaviorTreeNode 
+class Boss_IsPlayerNotDetectedCondition : public BehaviorTreeNode
 {
 public:
     NodeState Tick(shared_ptr<Monster>& owner) override;
 };
 
-class ChaseActionNode : public BehaviorTreeNode
+class Boss_AttackActionNode : public BehaviorTreeNode
 {
 public:
     NodeState Tick(shared_ptr<Monster>& owner) override;
 };
 
-class AttackActionNode : public BehaviorTreeNode
+class Boss_ChaseActionNode : public BehaviorTreeNode
 {
 public:
     NodeState Tick(shared_ptr<Monster>& owner) override;
 };
 
-class WanderActionNode : public BehaviorTreeNode 
+class Boss_WanderActionNode : public BehaviorTreeNode
 {
 public:
     NodeState Tick(shared_ptr<Monster>& owner) override;
 };
-
-
-

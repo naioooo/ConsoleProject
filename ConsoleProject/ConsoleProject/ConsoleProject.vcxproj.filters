@@ -49,6 +49,12 @@
     <Filter Include="헤더 파일\Stage">
       <UniqueIdentifier>{e9d1b269-18de-4414-b435-169565efe5ab}</UniqueIdentifier>
     </Filter>
+    <Filter Include="헤더 파일\Object\Attack">
+      <UniqueIdentifier>{f0f9beea-8e2e-497d-8658-33e917cfcf8d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Object\Attack">
+      <UniqueIdentifier>{6b558f91-edf0-4f72-a696-b037a0b513d4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -78,9 +84,6 @@
     <ClCompile Include="MonsterBehaviorTree.cpp">
       <Filter>소스 파일\Behavior Tree</Filter>
     </ClCompile>
-    <ClCompile Include="Bullet.cpp">
-      <Filter>소스 파일\Object</Filter>
-    </ClCompile>
     <ClCompile Include="Object.cpp">
       <Filter>소스 파일\Object</Filter>
     </ClCompile>
@@ -104,6 +107,27 @@
     </ClCompile>
     <ClCompile Include="BossStage.cpp">
       <Filter>소스 파일\Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="BossBehaviorTree.cpp">
+      <Filter>소스 파일\Behavior Tree</Filter>
+    </ClCompile>
+    <ClCompile Include="BossMonster.cpp">
+      <Filter>소스 파일\Object\Character</Filter>
+    </ClCompile>
+    <ClCompile Include="Bullet.cpp">
+      <Filter>소스 파일\Object\Attack</Filter>
+    </ClCompile>
+    <ClCompile Include="FireBall.cpp">
+      <Filter>소스 파일\Object\Attack</Filter>
+    </ClCompile>
+    <ClCompile Include="TitleScene.cpp">
+      <Filter>소스 파일\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneManager.cpp">
+      <Filter>소스 파일\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="EndingScene.cpp">
+      <Filter>소스 파일\Scene</Filter>
     </ClCompile>
     <ClCompile Include="StageManager.cpp">
       <Filter>소스 파일\Stage</Filter>
@@ -134,9 +158,6 @@
     <ClInclude Include="MonsterBehaviorTree.h">
       <Filter>헤더 파일\Behavior Tree</Filter>
     </ClInclude>
-    <ClInclude Include="Bullet.h">
-      <Filter>헤더 파일\Object</Filter>
-    </ClInclude>
     <ClInclude Include="Object.h">
       <Filter>헤더 파일\Object</Filter>
     </ClInclude>
@@ -163,6 +184,27 @@
     </ClInclude>
     <ClInclude Include="StageManager.h">
       <Filter>헤더 파일\Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="BossBehaviorTree.h">
+      <Filter>헤더 파일\Behavior Tree</Filter>
+    </ClInclude>
+    <ClInclude Include="BossMonster.h">
+      <Filter>헤더 파일\Object\Character</Filter>
+    </ClInclude>
+    <ClInclude Include="FireBall.h">
+      <Filter>헤더 파일\Object\Attack</Filter>
+    </ClInclude>
+    <ClInclude Include="Bullet.h">
+      <Filter>헤더 파일\Object\Attack</Filter>
+    </ClInclude>
+    <ClInclude Include="EndingScene.h">
+      <Filter>헤더 파일\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="TitleScene.h">
+      <Filter>헤더 파일\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneManager.h">
+      <Filter>헤더 파일\Scene</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

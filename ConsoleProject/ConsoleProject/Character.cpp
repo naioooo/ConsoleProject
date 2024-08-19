@@ -15,48 +15,48 @@ Character::~Character()
 {
 }
 
-int Character::getHP()
+int Character::GetHP()
 {
 	return m_HP;
 }
 
-int Character::getspeed()
+int Character::GetSpeed()
 {
 	return m_speed;
 }
 
-int Character::getattack()
+int Character::GetAttack()
 {
 	return m_attack;
 }
 
-int Character::getdefense()
+int Character::GetDefense()
 {
 	return m_defense;
 }
 
-void Character::setHP(int HP)
+void Character::SetHP(int HP)
 {
 	m_HP = HP;
 	if (m_HP <= 0)
 	{
-		setalive(false);
+		SetAlive(false);
 	}
 }
 
-void Character::insertbuffer(vector<string>& buffer)
+void Character::InsertBuffer(vector<string>& buffer)
 {
 }
 
-void Character::update(float elapsedTime)
+void Character::Update(float elapsedTime)
 {
 }
 
-void Character::move()
+void Character::Move()
 {
 }
 
-void Character::attack()
+void Character::Attack()
 {
 }
 

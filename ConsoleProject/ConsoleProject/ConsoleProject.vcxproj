@@ -128,9 +128,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AttackUP.cpp" />
+    <ClCompile Include="BossBehaviorTree.cpp" />
+    <ClCompile Include="BossMonster.cpp" />
     <ClCompile Include="BossStage.cpp" />
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Character.cpp" />
+    <ClCompile Include="EndingScene.cpp" />
+    <ClCompile Include="FireBall.cpp" />
     <ClCompile Include="GameScene.cpp" />
     <ClCompile Include="HPUP.cpp" />
     <ClCompile Include="Item.cpp" />
@@ -146,14 +150,20 @@
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="Stage.cpp" />
     <ClCompile Include="StageManager.cpp" />
+    <ClCompile Include="TitleScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AttackUP.h" />
+    <ClInclude Include="BossBehaviorTree.h" />
+    <ClInclude Include="BossMonster.h" />
     <ClInclude Include="BossStage.h" />
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="Character.h" />
+    <ClInclude Include="EndingScene.h" />
+    <ClInclude Include="FireBall.h" />
     <ClInclude Include="GameScene.h" />
     <ClInclude Include="HPUP.h" />
     <ClInclude Include="Item.h" />
@@ -168,8 +178,10 @@
     <ClInclude Include="Object.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Scene.h" />
+    <ClInclude Include="SceneManager.h" />
     <ClInclude Include="Stage.h" />
     <ClInclude Include="StageManager.h" />
+    <ClInclude Include="TitleScene.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

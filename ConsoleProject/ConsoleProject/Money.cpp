@@ -14,17 +14,17 @@ Money::~Money()
 {
 }
 
-int Money::getmoney()
+int Money::GetMoney()
 {
 	return m_money;
 }
 
-void Money::insertbuffer(vector<string>& buffer)
+void Money::InsertBuffer(vector<string>& buffer)
 {
 	buffer[m_point.y][m_point.x] = CH_MONEY;
 }
 
-void Money::update(float elapsedTime)
+void Money::Update(float elapsedTime)
 {
-	Item::update(elapsedTime);
+	Item::Update(elapsedTime);
 }

@@ -14,17 +14,17 @@ HpUP::~HpUP()
 {
 }
 
-int HpUP::getHpUP()
+int HpUP::GetHpUP()
 {
 	return m_HpUP;
 }
 
-void HpUP::insertbuffer(vector<string>& buffer)
+void HpUP::InsertBuffer(vector<string>& buffer)
 {
 	buffer[m_point.y][m_point.x] = CH_HPUP;
 }
 
-void HpUP::update(float elapsedTime)
+void HpUP::Update(float elapsedTime)
 {
-	Item::update(elapsedTime);
+	Item::Update(elapsedTime);
 }

@@ -10,7 +10,7 @@ Monster::Monster()
 Monster::Monster(const Point point, const int HP, const int speed, const int attack, const int defense)
 	: Character(point, HP, speed, attack, defense)
 {
-	m_behaviortree = std::make_shared<SelectorNode>();
+	m_behaviorTree = std::make_shared<SelectorNode>();
 
 	auto attackSequence = make_shared<SequenceNode>();
 	attackSequence->AddChild(make_shared<IsPlayerInAttackRangeCondition>());
@@ -24,14 +24,14 @@ Monster::Monster(const Point point, const int HP, const int speed, const int att
 	wanderSequence->AddChild(std::make_shared<IsPlayerNotDetectedCondition>());
 	wanderSequence->AddChild(std::make_shared<WanderActionNode>());
 
-	m_behaviortree->AddChild(attackSequence);
-	m_behaviortree->AddChild(chaseSequence);
-	m_behaviortree->AddChild(wanderSequence);
+	m_behaviorTree->AddChild(attackSequence);
+	m_behaviorTree->AddChild(chaseSequence);
+	m_behaviorTree->AddChild(wanderSequence);
 
 	m_detectionRange = 10.0f;
 	m_attackRange = 1.0f;
 	m_chasePoint = Point(0, 0);
-	m_speed_cnt = 0.0f;
+	m_speedCnt = 0.0f;
 	m_state = WANDER;
 }
 
@@ -39,27 +39,27 @@ Monster::~Monster()
 {
 }
 
-vector<int> Monster::getpath()
+vector<int> Monster::GetPath()
 {
 	return m_path;
 }
 
-Point Monster::getchasePoint()
+Point Monster::GetChasePoint()
 {
 	return m_chasePoint;
 }
 
-void Monster::setchasePoint(Point point)
+void Monster::SetChasePoint(Point point)
 {
 	m_chasePoint = point;
 }
 
-void Monster::setstate(int state)
+void Monster::SetState(int state)
 {
 	m_state = state;
 }
 
-void Monster::insertbuffer(vector<string>& buffer)
+void Monster::InsertBuffer(vector<string>& buffer)
 {
 	if (m_state == WANDER)
 	{
@@ -75,19 +75,19 @@ void Monster::insertbuffer(vector<string>& buffer)
 	}
 }
 
-void Monster::update(float elapsedTime)
+void Monster::Update(float elapsedTime)
 {
-	m_speed_cnt += elapsedTime;
+	m_speedCnt += elapsedTime;
 
-	if (m_speed_cnt > m_speed)
+	if (m_speedCnt > m_speed)
 	{
 		auto self = static_pointer_cast<Monster>(shared_from_this());
-		m_behaviortree->Tick(self);
-		m_speed_cnt = 0.0f;
+		m_behaviorTree->Tick(self);
+		m_speedCnt = 0.0f;
 	}
 }
 
-void Monster::move(const int dir)
+void Monster::Move(const int dir)
 {
 	Point next = m_point;
 
@@ -122,17 +122,17 @@ void Monster::move(const int dir)
 		break;
 	}
 
-	if (collision_check(next))
+	if (CollisionCheck(next))
 	{
 		m_point = next;
 	}
 }
 
-void Monster::attack()
+void Monster::Attack()
 {
 }
 
-bool Monster::collision_check(Point point)
+bool Monster::CollisionCheck(Point point)
 {
 	if (point.x < 0 || point.x >= MAX_WIDTH || point.y < 0 || point.y >= MAX_HEIGHT)
 	{
@@ -143,14 +143,7 @@ bool Monster::collision_check(Point point)
 	
 	for (auto& object : gameobjects[OBSTACLE])
 	{
-		if (object->getpoint() == point)
-		{
-			return false;
-		}
-	}
-	for (auto& object : gameobjects[PLAYER])
-	{
-		if (object->getpoint() == point)
+		if (object->GetPoint() == point)
 		{
 			return false;
 		}
@@ -170,7 +163,7 @@ bool Monster::IsValidPoint(Point point)
 
 	for (auto& object : gameobjects[OBSTACLE])
 	{
-		if (object->getpoint() == point)
+		if (object->GetPoint() == point)
 		{
 			return false;
 		}
@@ -201,10 +194,12 @@ void Monster::AStar(Point goal)
 		Node* current = openSet.top();
 		openSet.pop();
 
-		if (current->position == goal) {
+		if (current->position == goal) 
+		{
 			vector<int> pathDirections;
 			Node* node = current;
-			while (node->parent) {
+			while (node->parent)
+			{
 				if (node->position.x == node->parent->position.x - 1) 
 					pathDirections.push_back(LEFT);
 				if (node->position.x == node->parent->position.x + 1)
@@ -272,7 +267,7 @@ bool Monster::isObstacle(int x, int y)
 
 	for (auto& object : gameobjects[OBSTACLE])
 	{
-		if (object->getpoint() == p)
+		if (object->GetPoint() == p)
 		{
 			return true;
 		}
@@ -282,7 +277,7 @@ bool Monster::isObstacle(int x, int y)
 }
 
 // 직선이 장애물과 교차하는지 확인
-bool Monster::lineOfSight(const Point& start, const Point& end)
+bool Monster::LineOfSight(const Point& start, const Point& end)
 {
 	int dx = std::abs(end.x - start.x);
 	int dy = std::abs(end.y - start.y);
@@ -292,9 +287,6 @@ bool Monster::lineOfSight(const Point& start, const Point& end)
 
 	int x = start.x;
 	int y = start.y;
-
-
-	//gotoxy(100, 25);
 
 	while (true) 
 	{
@@ -328,7 +320,7 @@ bool Monster::isDetected(Point goal)
 
 	if (dist <= m_detectionRange)
 	{
-		if (lineOfSight(m_point, goal))
+		if (LineOfSight(m_point, goal))
 		{			
 			return true;
 		}
@@ -343,7 +335,7 @@ bool Monster::isAttacked(Point goal)
 
 	if (dist <= m_attackRange)
 	{
-		if (lineOfSight(m_point, goal))
+		if (LineOfSight(m_point, goal))
 		{
 			return true;
 		}

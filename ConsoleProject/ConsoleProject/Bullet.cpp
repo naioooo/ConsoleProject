@@ -10,40 +10,40 @@ Bullet::Bullet()
 }
 
 Bullet::Bullet(const Point point, const int speed, const int dir, const int damage, const int lifetime)
-	: Object(point), m_speed_cnt(speed), m_dir(dir), m_damage(damage), m_lifetime(lifetime)
+	: Object(point), m_speedCnt(speed), m_dir(dir), m_damage(damage), m_lifetime(lifetime)
 {
-	m_speed_cnt = 0;
-	m_lifetime_cnt = 0;
+	m_speedCnt = 0;
+	m_lifetimeCnt = 0;
 }
 
 Bullet::~Bullet()
 {
 }
 
-void Bullet::insertbuffer(vector<string>& buffer)
+void Bullet::InsertBuffer(vector<string>& buffer)
 {
     buffer[m_point.y][m_point.x] = CH_BULLET;
 }
 
-void Bullet::update(float elapsedTime)
+void Bullet::Update(float elapsedTime)
 {
-	if (m_lifetime_cnt >= m_lifetime)
+	if (m_lifetimeCnt >= m_lifetime)
 	{
 		m_alive = false;
 		return;
 	}
 
-	m_speed_cnt += elapsedTime;
-	if (m_speed_cnt > 120.0f)
+	m_speedCnt += elapsedTime;
+	if (m_speedCnt > 120.0f)
 	{
-		move(elapsedTime);
-		m_speed_cnt = 0.0f;
+		Move(elapsedTime);
+		m_speedCnt = 0.0f;
 	}
 
-	m_lifetime_cnt++;
+	m_lifetimeCnt++;
 }
 
-void Bullet::move(float elapsedTime)
+void Bullet::Move(float elapsedTime)
 {
 	Point next = m_point;
 
@@ -52,7 +52,7 @@ void Bullet::move(float elapsedTime)
 	case RIGHT:
 		if (next.x < MAX_WIDTH)
 		{
-			next.x ++;
+			next.x++;
 		}
 		break;
 	case LEFT:
@@ -107,7 +107,7 @@ void Bullet::move(float elapsedTime)
 		break;
 	}
 
-	if (collision_check(next))
+	if (CollisionCheck(next))
 	{
 		m_point = next;
 	}
@@ -117,7 +117,7 @@ void Bullet::move(float elapsedTime)
 	}
 }
 
-bool Bullet::collision_check(Point point)
+bool Bullet::CollisionCheck(Point point)
 {
 	if (point.x < 0 || point.x >= MAX_WIDTH || point.y < 0 || point.y >= MAX_HEIGHT)
 	{
@@ -128,7 +128,7 @@ bool Bullet::collision_check(Point point)
 
 	for (auto& object : gameobjects[OBSTACLE])
 	{
-		if (object->getpoint() == point)
+		if (object->GetPoint() == point)
 		{
 			return false;
 		}
@@ -136,16 +136,32 @@ bool Bullet::collision_check(Point point)
 
 	for (auto& object : gameobjects[MONSTER])
 	{
-		if (object->getpoint() == point)
+		if (gameobjects[MONSTER].size() == 1)
+		{
+			shared_ptr<BossMonster> bossmonster = dynamic_pointer_cast<BossMonster>(object);
+			if (bossmonster != nullptr)
+			{
+				Point pos = bossmonster->GetPoint();
+
+				if (point.x >= pos.x - 1 && point.x <= pos.x + 1 && point.y >= pos.y - 1 && point.y <= pos.y + 1)
+				{
+					int HP = bossmonster->GetHP() - m_damage;
+					bossmonster->SetHP(HP);
+
+					return false;
+				}
+			}
+		}
+		if (object->GetPoint() == point)
 		{
 			shared_ptr<Monster> monster = dynamic_pointer_cast<Monster>(object);
-			int HP = monster->getHP() - m_damage;
+			int HP = monster->GetHP() - m_damage;
 			if (HP <= 0)
 			{
 				vector<vector<shared_ptr<Object>>>& gameobjects{ GameScene::m_gameobjects };
 
 				shared_ptr<Player> player = dynamic_pointer_cast<Player>(gameobjects[PLAYER][0]);
-				player->setkill_cnt(player->getkill_cnt() + 1);
+				player->SetKillCnt(player->GetKillCnt() + 1);
 
 				random_device rd;
 				mt19937 gen(rd());
@@ -156,13 +172,13 @@ bool Bullet::collision_check(Point point)
 				switch (rand(gen))
 				{
 				case 0:
-					item = make_shared<AttackUP>(monster->getpoint(), 20, 5);
+					item = make_shared<AttackUP>(monster->GetPoint(), 100, 5);
 					break;
 				case 1:
-					item = make_shared<HpUP>(monster->getpoint(), 20, 1);
+					item = make_shared<HpUP>(monster->GetPoint(), 100, 1);
 					break;
 				case 2:
-					item = make_shared<Money>(monster->getpoint(), 20, 1000);
+					item = make_shared<Money>(monster->GetPoint(), 100, 1000);
 					break;
 				}
 
@@ -172,7 +188,7 @@ bool Bullet::collision_check(Point point)
 				}
 			}
 
-			monster->setHP(HP);
+			monster->SetHP(HP);
 
 			return false;
 		}

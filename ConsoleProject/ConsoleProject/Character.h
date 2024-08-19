@@ -6,7 +6,7 @@ class Character : public Object
 protected:
 	int m_HP;
 	int m_speed;
-	float m_speed_cnt;
+	float m_speedCnt;
 
 	int m_attack;
 	int m_defense;
@@ -18,18 +18,18 @@ public:
 	Character(const Point point, const int HP, const int speed, const int attack, const int defense);
 	~Character();
 
-	int getHP();
-	int getspeed();
-	int getattack();
-	int getdefense();
+	int GetHP();
+	int GetSpeed();
+	int GetAttack();
+	int GetDefense();
 
-	void setHP(int HP);
+	void SetHP(int HP);
 
-	virtual void insertbuffer(vector<string>& buffer);
-	virtual void update(float elapsedTime);
+	virtual void InsertBuffer(vector<string>& buffer);
+	virtual void Update(float elapsedTime);
 
-	virtual void move();
-	virtual void attack();
+	virtual void Move();
+	virtual void Attack();
 
 };
 

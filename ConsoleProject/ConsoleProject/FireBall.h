@@ -1,6 +1,6 @@
 #pragma once
 #include "Object.h"
-class Bullet : public Object
+class FireBall : public Object
 {
 private:
 	float m_speedCnt;
@@ -12,9 +12,9 @@ private:
 
 
 public:
-	Bullet();
-	Bullet(const Point point, const int speed, const int dir, const int damage, const int lifetime);
-	~Bullet();
+	FireBall();
+	FireBall(const Point point, const int speed, const int dir, const int damage, const int lifetime);
+	~FireBall();
 
 	void InsertBuffer(vector<string>& buffer) override;
 	void Update(float elapsedTime) override;

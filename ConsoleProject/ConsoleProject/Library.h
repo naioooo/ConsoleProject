@@ -32,9 +32,13 @@ using namespace std;
 #define CH_MONSTER3 '^'
 #define CH_PLAYER 'O'
 #define CH_BULLET '*'
+#define CH_FIREBALL 'o'
 #define CH_HPUP '+'
 #define CH_ATTACKUP 'A'
 #define CH_MONEY '$'
+#define CH_BOSS1 '('
+#define CH_BOSS2 '~'
+#define CH_BOSS3 ')'
 
 enum class NodeState
 {
@@ -115,11 +119,30 @@ struct Point
 	}
 };
 
+struct Node
+{
+	Point position;
+	float gCost, hCost; // gCost: 시작점에서 이 노드까지의 실제 거리, hCost: 이 노드에서 목표까지의 추정 거리
+	Node* parent;
+
+	// fCost 계산
+	float fCost() const; 
+
+	// 정렬을 위한 비교 연산자
+	bool operator>(const Node& other) const
+	{
+		return fCost() > other.fCost();
+	}
+};
+
 // 해시 함수 정의 (unordered_map 사용을 위해)
-namespace std {
+namespace std
+{
 	template <>
-	struct hash<Point> {
-		size_t operator()(const Point& p) const {
+	struct hash<Point> 
+	{
+		size_t operator()(const Point& p) const
+		{
 			return hash<int>()(p.x) ^ (hash<int>()(p.y) << 1);
 		}
 	};
@@ -128,10 +151,12 @@ namespace std {
 void gotoxy(int x, int y);
 void gotoxy(Point p);
 void gotoxy(COORD coord);
+
 bool tick(float& startTime, float& elapsedTime);
+
 void textcolor(int colorNum);
+
 float distance(Point& a, Point& b);
 float Heuristic(Point a, Point b);
-
 
 void setconsole();

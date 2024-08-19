@@ -5,8 +5,7 @@ StageManager::StageManager() : currentStageIndex(0)
     stages.push_back(std::make_unique<NormalStage>());
     stages.push_back(std::make_unique<NormalStage>());
     stages.push_back(std::make_unique<NormalStage>());
-    stages.push_back(std::make_unique<NormalStage>());
-    //stages.push_back(std::make_unique<BossStage>());   
+    stages.push_back(std::make_unique<BossStage>());  
 }
 
 void StageManager::EnterStage()
@@ -56,7 +55,12 @@ Stage* StageManager::GetCurrentStage()
     return nullptr;
 }
 
-size_t StageManager::getcurrentStageIndex()
+size_t StageManager::GetCurrentStageIndex() const
 {
     return currentStageIndex;
+}
+
+size_t StageManager::GetStagesSize()  const
+{
+    return stages.size();
 }

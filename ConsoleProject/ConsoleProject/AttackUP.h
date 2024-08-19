@@ -10,9 +10,9 @@ public:
     AttackUP(const Point point, const int lifetime, const int AttackUP);
     ~AttackUP();
 
-    int getAttackUP();
+    int GetAttackUP();
 
-    void insertbuffer(vector<string>& buffer) override;
-    void update(float elapsedTime) override;
+    void InsertBuffer(vector<string>& buffer) override;
+    void Update(float elapsedTime) override;
 };
 

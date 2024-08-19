@@ -12,13 +12,14 @@ public:
 	Object(const Point point);
 	~Object();
 
-	Point getpoint();
-	bool getalive();
+	Point GetPoint() const;
+	bool GetAlive() const;
 
-	void setalive(bool alive);
+	void SetAlive(bool alive);
+	void SetPoint(Point point);
 
-	virtual void insertbuffer(vector<string>& buffer);
-	virtual void update(float elapsedTime);
-	virtual bool collision_check(Point point);
+	virtual void InsertBuffer(vector<string>& buffer);
+	virtual void Update(float elapsedTime);
+	virtual bool CollisionCheck(Point point);
 };
 

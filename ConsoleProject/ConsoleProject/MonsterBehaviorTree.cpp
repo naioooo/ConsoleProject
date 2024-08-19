@@ -7,9 +7,9 @@ NodeState IsPlayerDetectedCondition::Tick(shared_ptr<Monster>& owner)
     vector<vector<shared_ptr<Object>>> gameobjects = GameScene::m_gameobjects;
     bool playerDetected = false; 
 
-    if (gameobjects[PLAYER][0]->getpoint() != owner->getchasePoint())
+    if (gameobjects[PLAYER][0]->GetPoint() != owner->GetChasePoint())
     {
-        if (owner->isDetected(gameobjects[PLAYER][0]->getpoint()))
+        if (owner->isDetected(gameobjects[PLAYER][0]->GetPoint()))
         {
             playerDetected = true;
         }
@@ -23,9 +23,9 @@ NodeState IsPlayerInAttackRangeCondition::Tick(shared_ptr<Monster>& owner)
     vector<vector<shared_ptr<Object>>> gameobjects = GameScene::m_gameobjects;
     bool inRange = false;
 
-    if (gameobjects[PLAYER][0]->getpoint() != owner->getchasePoint())
+    if (gameobjects[PLAYER][0]->GetPoint() != owner->GetChasePoint())
     {
-        if (owner->isAttacked(gameobjects[PLAYER][0]->getpoint()))
+        if (owner->isAttacked(gameobjects[PLAYER][0]->GetPoint()))
         {
             inRange = true;
         }
@@ -46,10 +46,10 @@ NodeState ChaseActionNode::Tick(shared_ptr<Monster>& owner)
     // 플레이어를 추적하는 로직을 구현합니다.
     vector<vector<shared_ptr<Object>>> gameobjects = GameScene::m_gameobjects;
 
-    owner->AStar(gameobjects[PLAYER][0]->getpoint());
-    owner->move(owner->getpath()[0]);
+    owner->AStar(gameobjects[PLAYER][0]->GetPoint());
+    owner->Move(owner->GetPath()[0]);
 
-    owner->setstate(CHASE);
+    owner->SetState(CHASE);
     return NodeState::Running; // 추적 중이므로 Running 상태를 반환
 }
 
@@ -58,9 +58,9 @@ NodeState AttackActionNode::Tick(shared_ptr<Monster>& owner)
     // 플레이어를 공격하는 로직을 구현합니다.
     vector<vector<shared_ptr<Object>>> gameobjects = GameScene::m_gameobjects;
     shared_ptr<Player> player = dynamic_pointer_cast<Player>(gameobjects[PLAYER][0]);
-    //player->setHP(player->getHP() - 1);
+    player->SetHP(player->GetHP() - owner->GetAttack());
 
-    owner->setstate(ATTACK);
+    owner->SetState(ATTACK);
     return NodeState::Success; // 공격 완료
 }
 
@@ -72,8 +72,8 @@ NodeState WanderActionNode::Tick(shared_ptr<Monster>& owner)
 
     uniform_int_distribution<int> dir(0, 4);
 
-    owner->move(dir(gen));
+    owner->Move(dir(gen));
 
-    owner->setstate(WANDER);
+    owner->SetState(WANDER);
     return NodeState::Running; // 배회 중이므로 Running 상태를 반환
 }

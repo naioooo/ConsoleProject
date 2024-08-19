@@ -6,25 +6,25 @@ Item::Item()
 
 Item::Item(const Point point, const int lifetime) : Object(point), m_lifetime(lifetime)
 {
-	m_lifetime_cnt = 0;
+	m_lifetimeCnt = 0;
 }
 
 Item::~Item()
 {
 }
 
-string Item::getname()
+string Item::GetName()
 {
 	return m_name;
 }
 
-void Item::update(float elapsedTime)
+void Item::Update(float elapsedTime)
 {
-	if (m_lifetime_cnt >= m_lifetime)
+	if (m_lifetimeCnt >= m_lifetime)
 	{
 		m_alive = false;
 		return;
 	}
 
-	m_lifetime_cnt++;
+	m_lifetimeCnt++;
 }

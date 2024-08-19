@@ -7,10 +7,11 @@ public:
     void Enter() override;
     void Update(float elapsedTime) override;
     void Exit() override;
-    bool IsStageComplete(int level) override; // 조건 체크 메서드
+    bool IsStageComplete(int level)override;
 
-    // 적과 장애물 생성 메서드
-    void SpawnEnemies();
-    void GenerateObstacles();
+    // 적과 장애물 생성 메서드     
+    void GenerateEnemies(vector<vector<shared_ptr<Object>>>& gameobjects);
+    void GenerateObstacles(vector<vector<shared_ptr<Object>>>& gameobjects);
+    bool CollisionCheck(Point point, vector<vector<shared_ptr<Object>>>& gameobjects);
 };
 

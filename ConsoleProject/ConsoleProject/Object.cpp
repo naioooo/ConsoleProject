@@ -13,31 +13,36 @@ Object::~Object()
 {
 }
 
-Point Object::getpoint()
+Point Object::GetPoint() const
 {
     return m_point;
 }
 
-bool Object::getalive()
+bool Object::GetAlive() const
 {
     return m_alive;
 }
 
-void Object::setalive(bool alive)
+void Object::SetAlive(bool alive)
 {
     m_alive = alive;
 }
 
-void Object::insertbuffer(vector<string>& buffer)
+void Object::SetPoint(Point point)
+{
+    m_point = point;
+}
+
+void Object::InsertBuffer(vector<string>& buffer)
 {
     buffer[m_point.y][m_point.x] = CH_OBSTACLE;
 }
 
-void Object::update(float elapsedTime)
+void Object::Update(float elapsedTime)
 {
 }
 
-bool Object::collision_check(Point point)
+bool Object::CollisionCheck(Point point)
 {
     return false;
 }

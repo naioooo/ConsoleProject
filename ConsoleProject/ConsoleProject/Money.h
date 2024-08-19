@@ -11,9 +11,9 @@ public:
     Money(const Point point, const int lifetime, const int money);
     ~Money();
 
-    int getmoney();
+    int GetMoney();
 
-    void insertbuffer(vector<string>& buffer) override;
-    void update(float elapsedTime) override;
+    void InsertBuffer(vector<string>& buffer) override;
+    void Update(float elapsedTime) override;
 };
 
