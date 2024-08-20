@@ -29,9 +29,9 @@ public:
 	virtual void InsertBuffer(vector<string>& buffer) override;
 	virtual void Update(float elapsedTime) override;
 
-	void Move(const int dir);
+	virtual void Move(const int dir);
 	void Attack() override; 
-	bool CollisionCheck(Point point) override;
+	virtual bool CollisionCheck(Point point) override;
 
 	virtual bool IsValidPoint(Point point);
 	void AStar(Point goal);

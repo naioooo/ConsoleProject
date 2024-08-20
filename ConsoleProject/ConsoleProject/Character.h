@@ -24,6 +24,8 @@ public:
 	int GetDefense();
 
 	void SetHP(int HP);
+	void SetSpeed(int speed);
+	void SetDir(int dir);
 
 	virtual void InsertBuffer(vector<string>& buffer);
 	virtual void Update(float elapsedTime);

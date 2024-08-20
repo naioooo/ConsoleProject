@@ -70,7 +70,7 @@ NodeState WanderActionNode::Tick(shared_ptr<Monster>& owner)
     random_device rd;
     mt19937 gen(rd());
 
-    uniform_int_distribution<int> dir(0, 4);
+    uniform_int_distribution<int> dir(1, 4);
 
     owner->Move(dir(gen));
 

@@ -7,6 +7,12 @@ class BossMonster : public Monster
 {
 private:
 	vector<shared_ptr<FireBall>> m_fireball;
+	int m_coolTime;
+	int m_coolTimeCnt;
+	int m_isAttack;
+
+	int m_attackTime;
+	int m_attackTimeCnt;
 
 public:
 	BossMonster();
@@ -15,10 +21,28 @@ public:
 
 	void InsertBuffer(vector<string>& buffer) override;
 	void Update(float elapsedTime) override;
+	void Move(const int dir) override;
+	bool CollisionCheck(Point point) override;
 	bool IsValidPoint(Point point) override;
 
-	void ExplosiveFireBall(int width, int height);
-	void MeteorFireBall();
+	int GetCoolTime();
+	int GetCoolTimeCnt();
+	int GetIsAttack();
+	int GetAttackTime();
+	int GetAttackTimeCnt();
+
+	void SetCoolTime(int coolTime);
+	void SetCoolTimeCnt(int coolTimeCnt);
+	void SetIsAttack(int isAttack);
+	void SetAttackTime(int attackTime);
+	void SetAttackTimeCnt(int attackTimeCnt);
+
+	void ChargeAttack(); // 돌진
+	void ChasePlayer(); // 따라가기
+	void ExplosiveFireBall(int width, int height); // 전역 폭발
+	void MeteorFireBall(); // 메테오
+	void DirectionalBlast(); // 장풍
+	void FireballfromMapEdges(); // 맵끝에서 발사
 
 };
 

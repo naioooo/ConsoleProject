@@ -2,30 +2,72 @@
 #include "BossBehaviorTree.h"
 #include "GameScene.h"
 
-NodeState Boss_IsPlayerInAttackRangeCondition::Tick(shared_ptr<Monster>& owner)
+NodeState Boss_IsTimeToAttackCondition::Tick(shared_ptr<Monster>& owner)
 {
-    vector<vector<shared_ptr<Object>>> gameobjects = GameScene::m_gameobjects;
-    bool inRange = false;
-    
-    if (owner->isAttacked(gameobjects[PLAYER][0]->GetPoint()))
+    shared_ptr<BossMonster> boss = dynamic_pointer_cast<BossMonster>(owner);
+    bool isCoolOn = false;
+
+    if (boss->GetCoolTimeCnt() >= boss->GetCoolTime())
     {
-        inRange = true;
+        random_device rd;
+        mt19937 gen(rd());
+        uniform_int_distribution<int> att(1, 6);
+
+        vector<vector<shared_ptr<Object>>>& gameobjects{ GameScene::m_gameobjects };
+        int choice = att(gen);
+        int dir = 0;
+
+        switch (choice)
+        {
+        case 1:            
+            dir = DetermineDirection(owner->GetPoint(), gameobjects[PLAYER][0]->GetPoint());
+            boss->SetDir(dir); 
+            boss->SetSpeed(60);
+            boss->SetAttackTime(10);
+            break;
+        case 2:
+            boss->SetSpeed(60);
+            boss->SetAttackTime(15);
+            break;
+        case 3:
+            boss->SetAttackTime(3);
+            break;
+        case 4:
+            boss->SetAttackTime(5);
+            break;
+        case 5:
+            dir = DetermineDirection(owner->GetPoint(), gameobjects[PLAYER][0]->GetPoint());
+            boss->SetDir(dir);
+            boss->SetAttackTime(5);
+            break;
+        case 6:
+            boss->SetAttackTime(10);
+            break;
+        }
+
+        boss->SetIsAttack(choice);
+        boss->SetCoolTimeCnt(0);
+        isCoolOn = true;
+    }
+    else
+    {
+        boss->SetCoolTimeCnt(boss->GetCoolTimeCnt() + 1);
     }
 
-    return inRange ? NodeState::Success : NodeState::Failure;
+    return isCoolOn ? NodeState::Success : NodeState::Failure;
 }
 
-NodeState Boss_IsPlayerDetectedCondition::Tick(shared_ptr<Monster>& owner)
+NodeState Boss_IsAttackingNowCondition::Tick(shared_ptr<Monster>& owner)
 {
-    vector<vector<shared_ptr<Object>>> gameobjects = GameScene::m_gameobjects;
-    bool playerDetected = false;
-    
-    if (owner->isDetected(gameobjects[PLAYER][0]->GetPoint()))
-    {
-        playerDetected = true;
+    shared_ptr<BossMonster> boss = dynamic_pointer_cast<BossMonster>(owner);
+    bool isAttack = false;
+
+    if (boss->GetIsAttack() > 0)
+    {    
+        isAttack = true;
     }
 
-    return playerDetected ? NodeState::Success : NodeState::Failure;
+    return isAttack ? NodeState::Success : NodeState::Failure;
 }
 
 NodeState Boss_AttackActionNode::Tick(shared_ptr<Monster>& owner)
@@ -33,55 +75,56 @@ NodeState Boss_AttackActionNode::Tick(shared_ptr<Monster>& owner)
     // 플레이어를 공격하는 로직을 구현합니다.
     shared_ptr<BossMonster> boss = dynamic_pointer_cast<BossMonster>(owner);
     
-    random_device rd;
-    mt19937 gen(rd());
-
-    uniform_int_distribution<int> att(0, 2);
-
-    switch (att(gen))
+    switch (boss->GetIsAttack())
     {
     case 1:
-        boss->ExplosiveFireBall(5, 5);
+        boss->ChargeAttack();
         break;
     case 2:
-        boss->MeteorFireBall();
-    default:
+        boss->ChasePlayer();
         break;
+    case 3:
+        boss->ExplosiveFireBall(5, 5);
+        break;
+    case 4:
+        boss->MeteorFireBall();
+        break;
+    case 5:
+        boss->DirectionalBlast();
+        break;
+    case 6:
+        boss->FireballfromMapEdges();
+        break;
+    }
+
+    boss->SetAttackTimeCnt(boss->GetAttackTimeCnt() + 1);
+
+    if (boss->GetAttackTimeCnt() > boss->GetAttackTime())
+    {
+        boss->SetAttackTimeCnt(0);
+        boss->SetIsAttack(0);
+        boss->SetSpeed(180);
     }
 
     owner->SetState(ATTACK);
     return NodeState::Success; // 공격 완료
 }
 
-NodeState Boss_ChaseActionNode::Tick(shared_ptr<Monster>& owner)
-{ 
-    // 플레이어를 추적하는 로직을 구현합니다.
-    vector<vector<shared_ptr<Object>>> gameobjects = GameScene::m_gameobjects;
-
-    owner->AStar(gameobjects[PLAYER][0]->GetPoint());
-    owner->Move(owner->GetPath()[0]);
-
-    owner->SetState(CHASE);
-    return NodeState::Running; // 추적 중이므로 Running 상태를 반환
-}
-
 NodeState Boss_WanderActionNode::Tick(shared_ptr<Monster>& owner)
-{ 
+{
+    shared_ptr<BossMonster> boss = dynamic_pointer_cast<BossMonster>(owner);
     // 적이 배회하는 로직을 구현합니다. 
     random_device rd;
     mt19937 gen(rd());
 
-    uniform_int_distribution<int> dir(0, 4);
+    uniform_int_distribution<int> dir(1, 4);
 
-    owner->Move(dir(gen));
+    boss->Move(dir(gen));
 
-    owner->SetState(WANDER);
+    boss->SetState(WANDER);
     return NodeState::Running; // 배회 중이므로 Running 상태를 반환
 }
 
-NodeState Boss_IsPlayerNotDetectedCondition::Tick(shared_ptr<Monster>& owner)
-{
-    // 플레이어가 탐지되지 않았는지 확인하는 로직을 구현합니다.
-    bool playerNotDetected = true; 
-    return playerNotDetected ? NodeState::Success : NodeState::Failure;
-}
+
+
+

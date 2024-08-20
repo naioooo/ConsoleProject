@@ -98,7 +98,7 @@ void GameScene::Draw()
 				textcolor(WHITE);
 				break;
 			case CH_FIREBALL:
-				textcolor(DarkGray);
+				textcolor(RED);
 				break;
 			case CH_MONSTER1:
 			case CH_MONSTER2:
@@ -117,7 +117,7 @@ void GameScene::Draw()
 				textcolor(DarkYellow);
 				break;
 			case CH_HPUP:
-				textcolor(RED);
+				textcolor(DarkGreen);
 				break;
 			case CH_MONEY:
 				textcolor(YELLOW);
@@ -125,8 +125,6 @@ void GameScene::Draw()
 			case CH_ATTACKUP:
 				textcolor(PURPLE);
 				break;
-
-
 			}
 
 			cout << ch;

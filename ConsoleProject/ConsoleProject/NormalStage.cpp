@@ -13,7 +13,7 @@ void NormalStage::Enter()
 void NormalStage::Update(float elapsedTime)
 {
 	vector<vector<shared_ptr<Object>>>& gameobjects{ GameScene::m_gameobjects };
-
+	
 	if (m_spawnTick > 10)
 	{
 		SpawnEnemies(gameobjects);
@@ -60,7 +60,7 @@ void NormalStage::SpawnEnemies(vector<vector<shared_ptr<Object>>>& gameobjects)
 
 	uniform_int_distribution<int> width(0, MAX_WIDTH - 1);
 	uniform_int_distribution<int> height(0, MAX_HEIGHT - 1);
-	uniform_int_distribution<int> edges(0, 4);
+	uniform_int_distribution<int> edges(0, 3);
 
 	int cnt = 0;
 
@@ -71,16 +71,20 @@ void NormalStage::SpawnEnemies(vector<vector<shared_ptr<Object>>>& gameobjects)
 
 		int edge = edges(gen); // 0-哭率, 1-坷弗率, 2-困率, 3-酒贰率
 		Point newPos{};
-		if (edge == 0) { // 哭率 场
+		if (edge == 0) 
+		{ // 哭率 场
 			newPos = Point(0, height(gen));
 		}
-		else if (edge == 1) { // 坷弗率 场
+		else if (edge == 1) 
+		{ // 坷弗率 场
 			newPos = Point(MAX_WIDTH - 1, height(gen));
 		}
-		else if (edge == 2) { // 困率 场
+		else if (edge == 2)
+		{ // 困率 场
 			newPos = Point(width(gen), 0);
 		}
-		else if (edge == 3) { // 酒贰率 场
+		else if (edge == 3)
+		{ // 酒贰率 场
 			newPos = Point(width(gen), MAX_HEIGHT - 1);
 		}
 
@@ -104,7 +108,7 @@ void NormalStage::GenerateObstacles(vector<vector<shared_ptr<Object>>>& gameobje
 
 	while (true)
 	{
-		if (cnt > 50)
+		if (cnt > 100)
 			break;
 
 		Point newPos = Point(width(gen), height(gen));

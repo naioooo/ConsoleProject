@@ -160,3 +160,6 @@ float distance(Point& a, Point& b);
 float Heuristic(Point a, Point b);
 
 void setconsole();
+
+float CalculateAngle(Point a, Point b);
+int DetermineDirection(Point a, Point b);

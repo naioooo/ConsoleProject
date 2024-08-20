@@ -264,7 +264,6 @@ bool Monster::isObstacle(int x, int y)
 	p.x = x;
 	p.y = y;
 
-
 	for (auto& object : gameobjects[OBSTACLE])
 	{
 		if (object->GetPoint() == p)

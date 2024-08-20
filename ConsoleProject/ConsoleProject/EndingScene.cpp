@@ -53,7 +53,7 @@ void EndingScene::Draw()
 			start = end + 1;
 
 			gotoxy(x - 4, y);
-			cout << "бс";
+			cout << " ";
 		}
 
 		end++;

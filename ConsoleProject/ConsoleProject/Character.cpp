@@ -44,6 +44,16 @@ void Character::SetHP(int HP)
 	}
 }
 
+void Character::SetSpeed(int speed)
+{
+	m_speed = speed;
+}
+
+void Character::SetDir(int dir)
+{
+	m_dir = dir;
+}
+
 void Character::InsertBuffer(vector<string>& buffer)
 {
 }
