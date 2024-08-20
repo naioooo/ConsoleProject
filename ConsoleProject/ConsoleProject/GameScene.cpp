@@ -207,7 +207,7 @@ void GameScene::Draw()
 
 	int idx = m_stageManager->GetCurrentStageIndex();
 
-	if (idx == 3)
+	if (idx == m_stageManager->GetStagesSize() - 1)
 	{
 		cout << "BOSS HP : ";
 		if (!m_gameobjects[MONSTER].empty())
