@@ -32,7 +32,7 @@ using namespace std;
 #define CH_MONSTER3 '^'
 #define CH_PLAYER 'O'
 #define CH_BULLET '*'
-#define CH_FIREBALL 'o'
+#define CH_fireBall 'o'
 #define CH_HPUP '+'
 #define CH_ATTACKUP 'A'
 #define CH_MONEY '$'

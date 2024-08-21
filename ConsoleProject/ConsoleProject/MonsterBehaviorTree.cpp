@@ -4,12 +4,12 @@
 
 NodeState IsPlayerDetectedCondition::Tick(shared_ptr<Monster>& owner)
 {
-    vector<vector<shared_ptr<Object>>> gameobjects = GameScene::m_gameobjects;
+    vector<vector<shared_ptr<Object>>> gameObjects = GameScene::m_gameObjects;
     bool playerDetected = false; 
 
-    if (gameobjects[PLAYER][0]->GetPoint() != owner->GetChasePoint())
+    if (gameObjects[PLAYER][0]->GetPoint() != owner->GetChasePoint())
     {
-        if (owner->isDetected(gameobjects[PLAYER][0]->GetPoint()))
+        if (owner->isDetected(gameObjects[PLAYER][0]->GetPoint()))
         {
             playerDetected = true;
         }
@@ -20,12 +20,12 @@ NodeState IsPlayerDetectedCondition::Tick(shared_ptr<Monster>& owner)
 
 NodeState IsPlayerInAttackRangeCondition::Tick(shared_ptr<Monster>& owner)
 {
-    vector<vector<shared_ptr<Object>>> gameobjects = GameScene::m_gameobjects;
+    vector<vector<shared_ptr<Object>>> gameObjects = GameScene::m_gameObjects;
     bool inRange = false;
 
-    if (gameobjects[PLAYER][0]->GetPoint() != owner->GetChasePoint())
+    if (gameObjects[PLAYER][0]->GetPoint() != owner->GetChasePoint())
     {
-        if (owner->isAttacked(gameobjects[PLAYER][0]->GetPoint()))
+        if (owner->isAttacked(gameObjects[PLAYER][0]->GetPoint()))
         {
             inRange = true;
         }
@@ -44,9 +44,9 @@ NodeState IsPlayerNotDetectedCondition::Tick(shared_ptr<Monster>& owner)
 NodeState ChaseActionNode::Tick(shared_ptr<Monster>& owner)
 {
     // 플레이어를 추적하는 로직을 구현합니다.
-    vector<vector<shared_ptr<Object>>> gameobjects = GameScene::m_gameobjects;
+    vector<vector<shared_ptr<Object>>> gameObjects = GameScene::m_gameObjects;
 
-    owner->AStar(gameobjects[PLAYER][0]->GetPoint());
+    owner->AStar(gameObjects[PLAYER][0]->GetPoint());
     owner->Move(owner->GetPath()[0]);
 
     owner->SetState(CHASE);
@@ -56,8 +56,8 @@ NodeState ChaseActionNode::Tick(shared_ptr<Monster>& owner)
 NodeState AttackActionNode::Tick(shared_ptr<Monster>& owner)
 {
     // 플레이어를 공격하는 로직을 구현합니다.
-    vector<vector<shared_ptr<Object>>> gameobjects = GameScene::m_gameobjects;
-    shared_ptr<Player> player = dynamic_pointer_cast<Player>(gameobjects[PLAYER][0]);
+    vector<vector<shared_ptr<Object>>> gameObjects = GameScene::m_gameObjects;
+    shared_ptr<Player> player = dynamic_pointer_cast<Player>(gameObjects[PLAYER][0]);
     player->SetHP(player->GetHP() - owner->GetAttack());
 
     owner->SetState(ATTACK);

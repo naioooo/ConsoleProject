@@ -139,9 +139,9 @@ bool Monster::CollisionCheck(Point point)
 		return false;
 	}
 
-	vector<vector<shared_ptr<Object>>>& gameobjects{ GameScene::m_gameobjects };
+	vector<vector<shared_ptr<Object>>>& gameObjects{ GameScene::m_gameObjects };
 	
-	for (auto& object : gameobjects[OBSTACLE])
+	for (auto& object : gameObjects[OBSTACLE])
 	{
 		if (object->GetPoint() == point)
 		{
@@ -159,9 +159,9 @@ bool Monster::IsValidPoint(Point point)
 		return false;
 	}
 
-	vector<vector<shared_ptr<Object>>>& gameobjects{ GameScene::m_gameobjects };
+	vector<vector<shared_ptr<Object>>>& gameObjects{ GameScene::m_gameObjects };
 
-	for (auto& object : gameobjects[OBSTACLE])
+	for (auto& object : gameObjects[OBSTACLE])
 	{
 		if (object->GetPoint() == point)
 		{
@@ -174,7 +174,7 @@ bool Monster::IsValidPoint(Point point)
 
 void Monster::AStar(Point goal)
 {
-	vector<vector<shared_ptr<Object>>>& gameobjects{ GameScene::m_gameobjects };
+	vector<vector<shared_ptr<Object>>>& gameObjects{ GameScene::m_gameObjects };
 
 	Point start = m_point;
 	priority_queue<Node*, vector<Node*>, greater<Node*>> openSet;
@@ -258,13 +258,13 @@ void Monster::AStar(Point goal)
 // 장애물 체크 함수
 bool Monster::isObstacle(int x, int y)
 {
-	vector<vector<shared_ptr<Object>>>& gameobjects{ GameScene::m_gameobjects };
+	vector<vector<shared_ptr<Object>>>& gameObjects{ GameScene::m_gameObjects };
 
 	Point p;
 	p.x = x;
 	p.y = y;
 
-	for (auto& object : gameobjects[OBSTACLE])
+	for (auto& object : gameObjects[OBSTACLE])
 	{
 		if (object->GetPoint() == p)
 		{

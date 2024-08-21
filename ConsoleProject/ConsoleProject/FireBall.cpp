@@ -1,4 +1,4 @@
-#include "FireBall.h"
+#include "fireBall.h"
 #include "GameScene.h"
 
 FireBall::FireBall()
@@ -18,7 +18,7 @@ FireBall::~FireBall()
 
 void FireBall::InsertBuffer(vector<string>& buffer)
 {
-	buffer[m_point.y][m_point.x] = CH_FIREBALL;
+	buffer[m_point.y][m_point.x] = CH_fireBall;
 }
 
 void FireBall::Update(float elapsedTime)
@@ -120,9 +120,9 @@ bool FireBall::CollisionCheck(Point point)
 		return false;
 	}
 
-	vector<vector<shared_ptr<Object>>>& gameobjects{ GameScene::m_gameobjects };
+	vector<vector<shared_ptr<Object>>>& gameObjects{ GameScene::m_gameObjects };
 
-	for (auto& object : gameobjects[OBSTACLE])
+	for (auto& object : gameObjects[OBSTACLE])
 	{
 		if (object->GetPoint() == point)
 		{
@@ -130,7 +130,7 @@ bool FireBall::CollisionCheck(Point point)
 		}
 	}
 
-	shared_ptr<Player> player = dynamic_pointer_cast<Player>(gameobjects[PLAYER][0]);
+	shared_ptr<Player> player = dynamic_pointer_cast<Player>(gameObjects[PLAYER][0]);
 	
 	if (player->GetPoint() == point)
 	{

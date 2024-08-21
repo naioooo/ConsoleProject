@@ -1,7 +1,7 @@
 #pragma once
 #include "GameScene.h"
 
-vector<vector<shared_ptr<Object>>> GameScene::m_gameobjects{};
+vector<vector<shared_ptr<Object>>> GameScene::m_gameObjects{};
 
 GameScene::GameScene()
 {	
@@ -21,9 +21,9 @@ void GameScene::Enter()
 		m_buffer.push_back(str);
 	}
 
-	m_gameobjects.resize(4);
-	m_gameobjects[PLAYER].push_back(make_shared <Player>(Point(MAX_WIDTH / 2, MAX_HEIGHT / 2), 30, 1, 50, 50, "호날두"));
-	m_player = dynamic_pointer_cast<Player>(m_gameobjects[PLAYER][0]);
+	m_gameObjects.resize(4);
+	m_gameObjects[PLAYER].push_back(make_shared <Player>(Point(MAX_WIDTH / 2, MAX_HEIGHT / 2), 30, 1, 50, 50, "호날두"));
+	m_player = dynamic_pointer_cast<Player>(m_gameObjects[PLAYER][0]);
 
 	DrawUI();
 
@@ -43,13 +43,13 @@ void GameScene::Exit()
 	m_buffer.clear();
 	m_buffer.shrink_to_fit();
 
-	for (auto& object : m_gameobjects)
+	for (auto& object : m_gameObjects)
 	{
 		object.clear();
 		object.shrink_to_fit();
 	}
-	m_gameobjects.clear();
-	m_gameobjects.shrink_to_fit();
+	m_gameObjects.clear();
+	m_gameObjects.shrink_to_fit();
 
 	m_stageManager = nullptr;
 }
@@ -71,7 +71,7 @@ void GameScene::Draw()
 		buf.resize(MAX_WIDTH, ' ');
 	}
 
-	for (auto& objects : m_gameobjects)
+	for (auto& objects : m_gameObjects)
 	{
 		for (auto& object : objects)
 		{
@@ -97,7 +97,7 @@ void GameScene::Draw()
 			case CH_OBSTACLE:
 				textcolor(WHITE);
 				break;
-			case CH_FIREBALL:
+			case CH_fireBall:
 				textcolor(RED);
 				break;
 			case CH_MONSTER1:
@@ -210,9 +210,9 @@ void GameScene::Draw()
 	if (idx == m_stageManager->GetStagesSize() - 1)
 	{
 		cout << "BOSS HP : ";
-		if (!m_gameobjects[MONSTER].empty())
+		if (!m_gameObjects[MONSTER].empty())
 		{
-			shared_ptr<BossMonster> boss = dynamic_pointer_cast<BossMonster> (m_gameobjects[MONSTER][0]);
+			shared_ptr<BossMonster> boss = dynamic_pointer_cast<BossMonster> (m_gameObjects[MONSTER][0]);
 
 			for (int i = 0; i < 30; i++)
 			{

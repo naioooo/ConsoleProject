@@ -1,12 +1,12 @@
 #pragma once
 #include "Monster.h"
-#include "FireBall.h"
+#include "fireBall.h"
 
 
 class BossMonster : public Monster
 {
 private:
-	vector<shared_ptr<FireBall>> m_fireball;
+	vector<shared_ptr<FireBall>> m_fireBall;
 	int m_coolTime;
 	int m_coolTimeCnt;
 	int m_isAttack;
@@ -42,7 +42,6 @@ public:
 	void ExplosiveFireBall(int width, int height); // 전역 폭발
 	void MeteorFireBall(); // 메테오
 	void DirectionalBlast(); // 장풍
-	void FireballfromMapEdges(); // 맵끝에서 발사
-
+	void fireBallfromMapEdges(); // 맵끝에서 발사
 };
 

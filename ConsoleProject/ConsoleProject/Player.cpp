@@ -268,18 +268,18 @@ bool Player::CollisionCheck(Point point)
 		return false;
 	}
 
-	vector<vector<shared_ptr<Object>>>& gameobjects{ GameScene::m_gameobjects };
+	vector<vector<shared_ptr<Object>>>& gameObjects{ GameScene::m_gameObjects };
 
-	for (auto& object : gameobjects[OBSTACLE])
+	for (auto& object : gameObjects[OBSTACLE])
 	{
 		if (object->GetPoint() == point)
 		{
 			return false;
 		}
 	}
-	for (auto& object : gameobjects[MONSTER])
+	for (auto& object : gameObjects[MONSTER])
 	{
-		if (gameobjects[MONSTER].size() == 1)
+		if (gameObjects[MONSTER].size() == 1)
 		{
 
 			shared_ptr<BossMonster> bossmonster = dynamic_pointer_cast<BossMonster>(object);
@@ -299,7 +299,7 @@ bool Player::CollisionCheck(Point point)
 			return false;
 		}
 	}
-	for (auto& object : gameobjects[ITEM])
+	for (auto& object : gameObjects[ITEM])
 	{
 		if (object->GetPoint() == point)
 		{

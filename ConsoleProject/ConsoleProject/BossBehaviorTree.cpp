@@ -13,14 +13,14 @@ NodeState Boss_IsTimeToAttackCondition::Tick(shared_ptr<Monster>& owner)
         mt19937 gen(rd());
         uniform_int_distribution<int> att(1, 6);
 
-        vector<vector<shared_ptr<Object>>>& gameobjects{ GameScene::m_gameobjects };
+        vector<vector<shared_ptr<Object>>>& gameObjects{ GameScene::m_gameObjects };
         int choice = att(gen);
         int dir = 0;
 
         switch (choice)
         {
         case 1:            
-            dir = DetermineDirection(owner->GetPoint(), gameobjects[PLAYER][0]->GetPoint());
+            dir = DetermineDirection(owner->GetPoint(), gameObjects[PLAYER][0]->GetPoint());
             boss->SetDir(dir); 
             boss->SetSpeed(60);
             boss->SetAttackTime(10);
@@ -36,7 +36,7 @@ NodeState Boss_IsTimeToAttackCondition::Tick(shared_ptr<Monster>& owner)
             boss->SetAttackTime(5);
             break;
         case 5:
-            dir = DetermineDirection(owner->GetPoint(), gameobjects[PLAYER][0]->GetPoint());
+            dir = DetermineDirection(owner->GetPoint(), gameObjects[PLAYER][0]->GetPoint());
             boss->SetDir(dir);
             boss->SetAttackTime(5);
             break;
@@ -93,7 +93,7 @@ NodeState Boss_AttackActionNode::Tick(shared_ptr<Monster>& owner)
         boss->DirectionalBlast();
         break;
     case 6:
-        boss->FireballfromMapEdges();
+        boss->fireBallfromMapEdges();
         break;
     }
 

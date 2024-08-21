@@ -10,7 +10,7 @@ class GameScene :
     public Scene
 {
 public:
-	static vector<vector<shared_ptr<Object>>> m_gameobjects;
+	static vector<vector<shared_ptr<Object>>> m_gameObjects;
 
 private:
 	vector<string> m_buffer;

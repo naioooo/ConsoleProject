@@ -3,26 +3,26 @@
 
 void NormalStage::Enter()
 {
-	vector<vector<shared_ptr<Object>>>& gameobjects{ GameScene::m_gameobjects };
+	vector<vector<shared_ptr<Object>>>& gameObjects{ GameScene::m_gameObjects };
 
 	m_spawnTick = 0;
-	gameobjects[PLAYER][0]->SetPoint(Point(MAX_WIDTH / 2, MAX_HEIGHT / 2));
-	GenerateObstacles(gameobjects);
+	gameObjects[PLAYER][0]->SetPoint(Point(MAX_WIDTH / 2, MAX_HEIGHT / 2));
+	GenerateObstacles(gameObjects);
 }
 
 void NormalStage::Update(float elapsedTime)
 {
-	vector<vector<shared_ptr<Object>>>& gameobjects{ GameScene::m_gameobjects };
+	vector<vector<shared_ptr<Object>>>& gameObjects{ GameScene::m_gameObjects };
 	
 	if (m_spawnTick > 10)
 	{
-		SpawnEnemies(gameobjects);
+		SpawnEnemies(gameObjects);
 		m_spawnTick = 0;
 	}
 
 	m_spawnTick++;
 
-	for (auto& objects : gameobjects)
+	for (auto& objects : gameObjects)
 	{
 		for (auto& object : objects)
 		{
@@ -33,27 +33,27 @@ void NormalStage::Update(float elapsedTime)
 	//죽은 개체는 벡터에서 삭제한다
 	for (int i = MONSTER; i <= ITEM; i++)
 	{
-		auto newEnd = std::remove_if(gameobjects[i].begin(), gameobjects[i].end(), [](shared_ptr<Object>& obj)
+		auto newEnd = std::remove_if(gameObjects[i].begin(), gameObjects[i].end(), [](shared_ptr<Object>& obj)
 			{
 				return !obj->GetAlive();
 			});
 
-		gameobjects[i].erase(newEnd, gameobjects[i].end());
+		gameObjects[i].erase(newEnd, gameObjects[i].end());
 	}
 }
 
 void NormalStage::Exit()
 {
-	vector<vector<shared_ptr<Object>>>& gameobjects{ GameScene::m_gameobjects };
+	vector<vector<shared_ptr<Object>>>& gameObjects{ GameScene::m_gameObjects };
 
 	for (int i = 0; i < 3; i++)
 	{
-		gameobjects[i].clear();
-		gameobjects[i].shrink_to_fit();
+		gameObjects[i].clear();
+		gameObjects[i].shrink_to_fit();
 	}
 }
 
-void NormalStage::SpawnEnemies(vector<vector<shared_ptr<Object>>>& gameobjects)
+void NormalStage::SpawnEnemies(vector<vector<shared_ptr<Object>>>& gameObjects)
 {	
 	random_device rd;
 	mt19937 gen(rd());
@@ -88,15 +88,15 @@ void NormalStage::SpawnEnemies(vector<vector<shared_ptr<Object>>>& gameobjects)
 			newPos = Point(width(gen), MAX_HEIGHT - 1);
 		}
 
-		if (CollisionCheck(newPos, gameobjects))
+		if (CollisionCheck(newPos, gameObjects))
 		{
-			gameobjects[MONSTER].push_back(make_shared<Monster>(newPos, 1, 180, 1, 50));
+			gameObjects[MONSTER].push_back(make_shared<Monster>(newPos, 1, 180, 1, 50));
 			cnt++;
 		}
 	}
 }
 
-void NormalStage::GenerateObstacles(vector<vector<shared_ptr<Object>>>& gameobjects)
+void NormalStage::GenerateObstacles(vector<vector<shared_ptr<Object>>>& gameObjects)
 {	
 	random_device rd;
 	mt19937 gen(rd());
@@ -114,19 +114,19 @@ void NormalStage::GenerateObstacles(vector<vector<shared_ptr<Object>>>& gameobje
 		Point newPos = Point(width(gen), height(gen));
 
 
-		if (CollisionCheck(newPos, gameobjects))
+		if (CollisionCheck(newPos, gameObjects))
 		{
-			gameobjects[OBSTACLE].push_back(make_shared<Object>(newPos));
+			gameObjects[OBSTACLE].push_back(make_shared<Object>(newPos));
 			cnt++;
 		}
 	}
 }
 
-bool NormalStage::CollisionCheck(Point point, vector<vector<shared_ptr<Object>>>& gameobjects)
+bool NormalStage::CollisionCheck(Point point, vector<vector<shared_ptr<Object>>>& gameObjects)
 {	
 	for (int i = 0; i < 4; i++)
 	{
-		for (auto& object : gameobjects[i])
+		for (auto& object : gameObjects[i])
 		{
 			if (object->GetPoint() == point)
 			{
@@ -140,8 +140,8 @@ bool NormalStage::CollisionCheck(Point point, vector<vector<shared_ptr<Object>>>
 
 bool NormalStage::IsStageComplete(int level)
 {
-	vector<vector<shared_ptr<Object>>>& gameobjects{ GameScene::m_gameobjects };
-	shared_ptr<Player> player = dynamic_pointer_cast<Player> (gameobjects[PLAYER][0]);
+	vector<vector<shared_ptr<Object>>>& gameObjects{ GameScene::m_gameObjects };
+	shared_ptr<Player> player = dynamic_pointer_cast<Player> (gameObjects[PLAYER][0]);
 	
 	if (player->GetKillCnt() >= level * 10)
 	{

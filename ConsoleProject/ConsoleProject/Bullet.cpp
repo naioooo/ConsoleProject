@@ -124,9 +124,9 @@ bool Bullet::CollisionCheck(Point point)
 		return false;
 	}
 
-	vector<vector<shared_ptr<Object>>>& gameobjects{ GameScene::m_gameobjects };
+	vector<vector<shared_ptr<Object>>>& gameObjects{ GameScene::m_gameObjects };
 
-	for (auto& object : gameobjects[OBSTACLE])
+	for (auto& object : gameObjects[OBSTACLE])
 	{
 		if (object->GetPoint() == point)
 		{
@@ -134,9 +134,9 @@ bool Bullet::CollisionCheck(Point point)
 		}
 	}
 
-	for (auto& object : gameobjects[MONSTER])
+	for (auto& object : gameObjects[MONSTER])
 	{
-		if (gameobjects[MONSTER].size() == 1)
+		if (gameObjects[MONSTER].size() == 1)
 		{
 			shared_ptr<BossMonster> bossmonster = dynamic_pointer_cast<BossMonster>(object);
 			if (bossmonster != nullptr)
@@ -158,9 +158,9 @@ bool Bullet::CollisionCheck(Point point)
 			int HP = monster->GetHP() - m_damage;
 			if (HP <= 0)
 			{
-				vector<vector<shared_ptr<Object>>>& gameobjects{ GameScene::m_gameobjects };
+				vector<vector<shared_ptr<Object>>>& gameObjects{ GameScene::m_gameObjects };
 
-				shared_ptr<Player> player = dynamic_pointer_cast<Player>(gameobjects[PLAYER][0]);
+				shared_ptr<Player> player = dynamic_pointer_cast<Player>(gameObjects[PLAYER][0]);
 				player->SetKillCnt(player->GetKillCnt() + 1);
 
 				random_device rd;
@@ -184,7 +184,7 @@ bool Bullet::CollisionCheck(Point point)
 
 				if (item != nullptr)
 				{
-					gameobjects[ITEM].push_back(item);
+					gameObjects[ITEM].push_back(item);
 				}
 			}
 

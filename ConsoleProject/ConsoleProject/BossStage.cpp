@@ -3,18 +3,18 @@
 
 void BossStage::Enter()
 {
-	vector<vector<shared_ptr<Object>>>& gameobjects{ GameScene::m_gameobjects };
+	vector<vector<shared_ptr<Object>>>& gameObjects{ GameScene::m_gameObjects };
 
-	gameobjects[PLAYER][0]->SetPoint(Point(MAX_WIDTH / 2 - 10, MAX_HEIGHT / 2));
-	GenerateObstacles(gameobjects);
-	GenerateEnemies(gameobjects);
+	gameObjects[PLAYER][0]->SetPoint(Point(MAX_WIDTH / 2 - 10, MAX_HEIGHT / 2));
+	GenerateObstacles(gameObjects);
+	GenerateEnemies(gameObjects);
 }
 
 void BossStage::Update(float elapsedTime)
 {
-	vector<vector<shared_ptr<Object>>>& gameobjects{ GameScene::m_gameobjects };
+	vector<vector<shared_ptr<Object>>>& gameObjects{ GameScene::m_gameObjects };
 
-	for (auto& objects : gameobjects)
+	for (auto& objects : gameObjects)
 	{
 		for (auto& object : objects)
 		{
@@ -25,31 +25,31 @@ void BossStage::Update(float elapsedTime)
 	//죽은 개체는 벡터에서 삭제한다
 	for (int i = MONSTER; i <= ITEM; i++)
 	{
-		auto newEnd = std::remove_if(gameobjects[i].begin(), gameobjects[i].end(), [](shared_ptr<Object>& obj)
+		auto newEnd = std::remove_if(gameObjects[i].begin(), gameObjects[i].end(), [](shared_ptr<Object>& obj)
 			{
 				return !obj->GetAlive();
 			});
 
-		gameobjects[i].erase(newEnd, gameobjects[i].end());
+		gameObjects[i].erase(newEnd, gameObjects[i].end());
 	}
 }
 
 void BossStage::Exit()
 {
-	vector<vector<shared_ptr<Object>>>& gameobjects{ GameScene::m_gameobjects };
+	vector<vector<shared_ptr<Object>>>& gameObjects{ GameScene::m_gameObjects };
 
 	for (int i = 0; i < 3; i++)
 	{
-		gameobjects[i].clear();
-		gameobjects[i].shrink_to_fit();
+		gameObjects[i].clear();
+		gameObjects[i].shrink_to_fit();
 	}
 }
 
 bool BossStage::IsStageComplete(int level)
 {
-	vector<vector<shared_ptr<Object>>>& gameobjects{ GameScene::m_gameobjects };
+	vector<vector<shared_ptr<Object>>>& gameObjects{ GameScene::m_gameObjects };
 
-	if (gameobjects[MONSTER].empty())
+	if (gameObjects[MONSTER].empty())
 	{
 		return true;
 	}
@@ -57,13 +57,13 @@ bool BossStage::IsStageComplete(int level)
 	return false;
 }
 
-void BossStage::GenerateEnemies(vector<vector<shared_ptr<Object>>>& gameobjects)
+void BossStage::GenerateEnemies(vector<vector<shared_ptr<Object>>>& gameObjects)
 {
 	Point center{ MAX_WIDTH / 2 + 10 , MAX_HEIGHT / 2 };
-	gameobjects[MONSTER].push_back(make_shared<BossMonster>(center, 30, 180, 50, 50));
+	gameObjects[MONSTER].push_back(make_shared<BossMonster>(center, 30, 180, 50, 50));
 }
 
-void BossStage::GenerateObstacles(vector<vector<shared_ptr<Object>>>& gameobjects)
+void BossStage::GenerateObstacles(vector<vector<shared_ptr<Object>>>& gameObjects)
 {
 	int x = 19;
 	int y = 4;
@@ -75,7 +75,7 @@ void BossStage::GenerateObstacles(vector<vector<shared_ptr<Object>>>& gameobject
 
 			Point newPos = Point(x + i, y + j);
 
-			gameobjects[OBSTACLE].push_back(make_shared<Object>(newPos));
+			gameObjects[OBSTACLE].push_back(make_shared<Object>(newPos));
 		}
 	}
 
@@ -88,7 +88,7 @@ void BossStage::GenerateObstacles(vector<vector<shared_ptr<Object>>>& gameobject
 		{
 			Point newPos = Point(x + i, y + j);
 
-			gameobjects[OBSTACLE].push_back(make_shared<Object>(newPos));
+			gameObjects[OBSTACLE].push_back(make_shared<Object>(newPos));
 		}
 	}
 
@@ -101,7 +101,7 @@ void BossStage::GenerateObstacles(vector<vector<shared_ptr<Object>>>& gameobject
 		{
 			Point newPos = Point(x + i, y + j);
 
-			gameobjects[OBSTACLE].push_back(make_shared<Object>(newPos));
+			gameObjects[OBSTACLE].push_back(make_shared<Object>(newPos));
 		}
 	}
 
@@ -114,13 +114,13 @@ void BossStage::GenerateObstacles(vector<vector<shared_ptr<Object>>>& gameobject
 		{
 			Point newPos = Point(x + i, y + j);
 
-			gameobjects[OBSTACLE].push_back(make_shared<Object>(newPos));
+			gameObjects[OBSTACLE].push_back(make_shared<Object>(newPos));
 		}
 	}
 
 }
 
-bool BossStage::CollisionCheck(Point point, vector<vector<shared_ptr<Object>>>& gameobjects)
+bool BossStage::CollisionCheck(Point point, vector<vector<shared_ptr<Object>>>& gameObjects)
 {
 	return false;
 }

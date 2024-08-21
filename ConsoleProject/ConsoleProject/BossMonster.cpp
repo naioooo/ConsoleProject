@@ -47,11 +47,11 @@ BossMonster::~BossMonster()
 
 void BossMonster::InsertBuffer(vector<string>& buffer)
 {
-	for (auto& fireball : m_fireball)
+	for (auto& fireBall : m_fireBall)
 	{
-		if (fireball->GetAlive())
+		if (fireBall->GetAlive())
 		{
-			fireball->InsertBuffer(buffer);
+			fireBall->InsertBuffer(buffer);
 		}
 	}
 
@@ -84,17 +84,17 @@ void BossMonster::Update(float elapsedTime)
 		m_speedCnt = 0.0f;
 	}
 
-	for (auto& fireball : m_fireball)
+	for (auto& fireBall : m_fireBall)
 	{
-		fireball->Update(elapsedTime);
+		fireBall->Update(elapsedTime);
 	}
 
-	auto newEnd = std::remove_if(m_fireball.begin(), m_fireball.end(), [](shared_ptr<FireBall>& fireball)
+	auto newEnd = std::remove_if(m_fireBall.begin(), m_fireBall.end(), [](shared_ptr<FireBall>& fireBall)
 		{
-			return !fireball->GetAlive();
+			return !fireBall->GetAlive();
 		});
 
-	m_fireball.erase(newEnd, m_fireball.end());
+	m_fireBall.erase(newEnd, m_fireBall.end());
 }
 
 void BossMonster::Move(const int dir)
@@ -145,10 +145,10 @@ bool BossMonster::CollisionCheck(Point point)
 		return false;
 	}
 
-	vector<vector<shared_ptr<Object>>>& gameobjects{ GameScene::m_gameobjects };
+	vector<vector<shared_ptr<Object>>>& gameObjects{ GameScene::m_gameObjects };
 	Point m_point{};
 
-	for (auto& object : gameobjects[OBSTACLE])
+	for (auto& object : gameObjects[OBSTACLE])
 	{
 		m_point = object->GetPoint();
 
@@ -159,12 +159,12 @@ bool BossMonster::CollisionCheck(Point point)
 		}
 	}	
 
-	m_point = gameobjects[PLAYER][0]->GetPoint();
+	m_point = gameObjects[PLAYER][0]->GetPoint();
 
 	if (m_point.x > point.x - 2 && m_point.x < point.x + 2 &&
 		m_point.y > point.y - 2 && m_point.y < point.y + 2)
 	{
-		shared_ptr<Player> player = dynamic_pointer_cast<Player>(gameobjects[PLAYER][0]);
+		shared_ptr<Player> player = dynamic_pointer_cast<Player>(gameObjects[PLAYER][0]);
 		player->SetHP(player->GetHP() - 1);
 		return false;
 	}
@@ -179,10 +179,10 @@ bool BossMonster::IsValidPoint(Point point)
 		return false;
 	}
 
-	vector<vector<shared_ptr<Object>>>& gameobjects{ GameScene::m_gameobjects };
+	vector<vector<shared_ptr<Object>>>& gameObjects{ GameScene::m_gameObjects };
 	Point m_point{};
 
-	for (auto& object : gameobjects[OBSTACLE])
+	for (auto& object : gameObjects[OBSTACLE])
 	{
 		m_point = object->GetPoint();
 
@@ -253,34 +253,34 @@ void BossMonster::ChargeAttack()
 
 void BossMonster::ChasePlayer()
 {
-	vector<vector<shared_ptr<Object>>> gameobjects = GameScene::m_gameobjects;
+	vector<vector<shared_ptr<Object>>> gameObjects = GameScene::m_gameObjects;
 
-	AStar(gameobjects[PLAYER][0]->GetPoint());
+	AStar(gameObjects[PLAYER][0]->GetPoint());
 	Move(GetPath()[0]);
 }
 
 void BossMonster::ExplosiveFireBall(int width, int height)
 {
-	m_fireball.push_back(make_shared<FireBall>(Point(m_point.x - 2, m_point.y - 2), 1, LEFTUP, 1, 5));
-	m_fireball.push_back(make_shared<FireBall>(Point(m_point.x + 2, m_point.y - 2), 1, RIGHTUP, 1, 5));
-	m_fireball.push_back(make_shared<FireBall>(Point(m_point.x - 2, m_point.y + 2), 1, LEFTDOWN, 1, 5));
-	m_fireball.push_back(make_shared<FireBall>(Point(m_point.x + 2, m_point.y + 2), 1, RIGHTDOWN, 1, 5));
+	m_fireBall.push_back(make_shared<FireBall>(Point(m_point.x - 2, m_point.y - 2), 1, LEFTUP, 1, 5));
+	m_fireBall.push_back(make_shared<FireBall>(Point(m_point.x + 2, m_point.y - 2), 1, RIGHTUP, 1, 5));
+	m_fireBall.push_back(make_shared<FireBall>(Point(m_point.x - 2, m_point.y + 2), 1, LEFTDOWN, 1, 5));
+	m_fireBall.push_back(make_shared<FireBall>(Point(m_point.x + 2, m_point.y + 2), 1, RIGHTDOWN, 1, 5));
 
 	for (int i = -1; i <= 1; i++)
 	{
-		m_fireball.push_back(make_shared<FireBall>(Point(m_point.x + i, m_point.y - 2), 1, UP, 1, 5));
+		m_fireBall.push_back(make_shared<FireBall>(Point(m_point.x + i, m_point.y - 2), 1, UP, 1, 5));
 	}
 	for (int i = -1; i <= 1; i++)
 	{
-		m_fireball.push_back(make_shared<FireBall>(Point(m_point.x + i, m_point.y + 2), 1, DOWN, 1, 5));
+		m_fireBall.push_back(make_shared<FireBall>(Point(m_point.x + i, m_point.y + 2), 1, DOWN, 1, 5));
 	}
 	for (int i = -1; i <= 1; i++)
 	{
-		m_fireball.push_back(make_shared<FireBall>(Point(m_point.x - 2, m_point.y - i), 1, LEFT, 1, 5));
+		m_fireBall.push_back(make_shared<FireBall>(Point(m_point.x - 2, m_point.y - i), 1, LEFT, 1, 5));
 	}
 	for (int i = -1; i <= 1; i++)
 	{
-		m_fireball.push_back(make_shared<FireBall>(Point(m_point.x + 2, m_point.y + i), 1, RIGHT, 1, 5));
+		m_fireBall.push_back(make_shared<FireBall>(Point(m_point.x + 2, m_point.y + i), 1, RIGHT, 1, 5));
 	}	
 
 	m_isAttack = 7;
@@ -305,8 +305,8 @@ void BossMonster::MeteorFireBall()
 
 		if (CollisionCheck(m_point))
 		{
-			shared_ptr<FireBall> fireball = make_shared<FireBall>(m_point, 1, m_dir, 3, 1);
-			m_fireball.push_back(fireball);
+			shared_ptr<FireBall> fireBall = make_shared<FireBall>(m_point, 1, m_dir, 3, 1);
+			m_fireBall.push_back(fireBall);
 			cnt++;
 		}
 	}
@@ -341,16 +341,16 @@ void BossMonster::DirectionalBlast()
 	case RIGHT:
 		for (int i = -3; i <= 3; i++)
 		{			
-			shared_ptr<FireBall> fireball = make_shared<FireBall>(Point(newX, newY + i), 1, m_dir, 3, 10);
-			m_fireball.push_back(fireball);
+			shared_ptr<FireBall> fireBall = make_shared<FireBall>(Point(newX, newY + i), 1, m_dir, 3, 10);
+			m_fireBall.push_back(fireBall);
 		}
 		break;
 	case UP:
 	case DOWN:
 		for (int i = -3; i <= 3; i++)
 		{
-			shared_ptr<FireBall> fireball = make_shared<FireBall>(Point(newX + i, newY), 1, m_dir, 3, 10);
-			m_fireball.push_back(fireball);
+			shared_ptr<FireBall> fireBall = make_shared<FireBall>(Point(newX + i, newY), 1, m_dir, 3, 10);
+			m_fireBall.push_back(fireBall);
 		}
 		break;
 	}
@@ -358,7 +358,7 @@ void BossMonster::DirectionalBlast()
 	m_isAttack = 7;
 }
 
-void BossMonster::FireballfromMapEdges()
+void BossMonster::fireBallfromMapEdges()
 {
 	random_device rd;
 	mt19937 gen(rd());
@@ -373,29 +373,29 @@ void BossMonster::FireballfromMapEdges()
 	case LEFT:
 		for (int i = 0; i < MAX_HEIGHT; i += 2)
 		{
-			shared_ptr<FireBall> fireball = make_shared<FireBall>(Point(0, i), 1, RIGHT, 3, MAX_WIDTH);
-			m_fireball.push_back(fireball);
+			shared_ptr<FireBall> fireBall = make_shared<FireBall>(Point(0, i), 1, RIGHT, 3, MAX_WIDTH);
+			m_fireBall.push_back(fireBall);
 		}
 		break;
 	case RIGHT:
 		for (int i = 1; i < MAX_HEIGHT; i += 2)
 		{
-			shared_ptr<FireBall> fireball = make_shared<FireBall>(Point(MAX_WIDTH - 1, i), 1, LEFT, 3, MAX_WIDTH);
-			m_fireball.push_back(fireball);
+			shared_ptr<FireBall> fireBall = make_shared<FireBall>(Point(MAX_WIDTH - 1, i), 1, LEFT, 3, MAX_WIDTH);
+			m_fireBall.push_back(fireBall);
 		}
 		break;
 	case UP:
 		for (int i = 0; i < MAX_WIDTH; i += 2)
 		{
-			shared_ptr<FireBall> fireball = make_shared<FireBall>(Point(i, 0), 1, DOWN, 3, MAX_HEIGHT);
-			m_fireball.push_back(fireball);
+			shared_ptr<FireBall> fireBall = make_shared<FireBall>(Point(i, 0), 1, DOWN, 3, MAX_HEIGHT);
+			m_fireBall.push_back(fireBall);
 		}
 		break;
 	case DOWN:
 		for (int i = 1; i < MAX_WIDTH; i += 2)
 		{
-			shared_ptr<FireBall> fireball = make_shared<FireBall>(Point(i, MAX_HEIGHT - 1 ), 1, UP, 3, MAX_HEIGHT);
-			m_fireball.push_back(fireball);
+			shared_ptr<FireBall> fireBall = make_shared<FireBall>(Point(i, MAX_HEIGHT - 1 ), 1, UP, 3, MAX_HEIGHT);
+			m_fireBall.push_back(fireBall);
 		}
 		break;
 	}
