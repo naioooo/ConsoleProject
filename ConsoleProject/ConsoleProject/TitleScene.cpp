@@ -53,7 +53,7 @@ void TitleScene::Draw()
 			y = stoi(str.substr(start, end - start));
 			start = end + 1;
 
-			gotoxy(x - 4, y);
+			GoToXY(x - 4, y);
 			cout << " ";
 		}
 
@@ -63,7 +63,7 @@ void TitleScene::Draw()
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE | (BLACK << 4));
 }
 
-void TitleScene::Input()
+void TitleScene::Input(float elapsedTime)
 {
 }
 

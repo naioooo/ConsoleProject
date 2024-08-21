@@ -4,16 +4,15 @@
 #include "HPUP.h"
 #include "AttackUP.h"
 #include "Money.h"
+#include "SpeedUP.h"
 
 Bullet::Bullet()
 {
 }
 
 Bullet::Bullet(const Point point, const int speed, const int dir, const int damage, const int lifetime)
-	: Object(point), m_speedCnt(speed), m_dir(dir), m_damage(damage), m_lifetime(lifetime)
+	: Projectile(point, speed, dir, damage, lifetime)
 {
-	m_speedCnt = 0;
-	m_lifetimeCnt = 0;
 }
 
 Bullet::~Bullet()
@@ -23,98 +22,6 @@ Bullet::~Bullet()
 void Bullet::InsertBuffer(vector<string>& buffer)
 {
     buffer[m_point.y][m_point.x] = CH_BULLET;
-}
-
-void Bullet::Update(float elapsedTime)
-{
-	if (m_lifetimeCnt >= m_lifetime)
-	{
-		m_alive = false;
-		return;
-	}
-
-	m_speedCnt += elapsedTime;
-	if (m_speedCnt > 120.0f)
-	{
-		Move(elapsedTime);
-		m_speedCnt = 0.0f;
-	}
-
-	m_lifetimeCnt++;
-}
-
-void Bullet::Move(float elapsedTime)
-{
-	Point next = m_point;
-
-	switch (m_dir)
-	{
-	case RIGHT:
-		if (next.x < MAX_WIDTH)
-		{
-			next.x++;
-		}
-		break;
-	case LEFT:
-		if (next.x >= 0)
-		{
-			next.x--;
-		}
-		break;
-	case UP:
-		if (next.y >= 0)
-		{
-			next.y --;
-		}
-		break;
-	case DOWN:
-		if (next.y < MAX_HEIGHT)
-		{
-			next.y ++;
-		}
-		break;
-
-	case LEFTUP:
-		if (next.x >= 0 && next.y >= 0)
-		{
-			next.x--;
-			next.y--;
-		}
-		break;
-	case RIGHTUP:
-		if (next.x < MAX_WIDTH && next.y >= 0)
-		{
-			next.x++;
-			next.y--;
-		}
-		break;
-	case LEFTDOWN:
-		if (next.x >= 0 && next.y < MAX_HEIGHT)
-		{
-			next.x--;
-			next.y++;
-		}
-		break;
-	case RIGHTDOWN:
-		if (next.x < MAX_WIDTH && next.y < MAX_HEIGHT)
-		{
-			next.x++;
-			next.y++;
-		}
-		break;
-
-	default:
-		break;
-	}
-
-	if (CollisionCheck(next))
-	{
-		m_point = next;
-	}
-	else
-	{
-		m_alive = false;
-	}
 }
 
 bool Bullet::CollisionCheck(Point point)
@@ -165,20 +72,23 @@ bool Bullet::CollisionCheck(Point point)
 
 				random_device rd;
 				mt19937 gen(rd());
-				uniform_int_distribution<int> rand(0, 4);
+				uniform_int_distribution<int> rand(0, 5);
 
 				shared_ptr<Item> item;
 
 				switch (rand(gen))
 				{
 				case 0:
-					item = make_shared<AttackUP>(monster->GetPoint(), 100, 5);
+					item = make_shared<AttackUP>(monster->GetPoint(), 1000, 30);
 					break;
 				case 1:
-					item = make_shared<HpUP>(monster->GetPoint(), 100, 1);
+					item = make_shared<HpUP>(monster->GetPoint(), 1000, 1);
 					break;
 				case 2:
-					item = make_shared<Money>(monster->GetPoint(), 100, 1000);
+					item = make_shared<Money>(monster->GetPoint(), 1000, 1000);
+					break;
+				case 3:
+					item = make_shared<SpeedUP>(monster->GetPoint(), 1000, 10);
 					break;
 				}
 

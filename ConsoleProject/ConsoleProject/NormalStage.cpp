@@ -1,11 +1,12 @@
 #include "NormalStage.h"
 #include "GameScene.h"
 
-void NormalStage::Enter()
+void NormalStage::Enter(int currentStageIndex)
 {
 	vector<vector<shared_ptr<Object>>>& gameObjects{ GameScene::m_gameObjects };
 
-	m_spawnTick = 0;
+	m_level = currentStageIndex + 1;
+	m_spawnTick = 250;
 	gameObjects[PLAYER][0]->SetPoint(Point(MAX_WIDTH / 2, MAX_HEIGHT / 2));
 	GenerateObstacles(gameObjects);
 }
@@ -14,7 +15,7 @@ void NormalStage::Update(float elapsedTime)
 {
 	vector<vector<shared_ptr<Object>>>& gameObjects{ GameScene::m_gameObjects };
 	
-	if (m_spawnTick > 10)
+	if (m_spawnTick > 300)
 	{
 		SpawnEnemies(gameObjects);
 		m_spawnTick = 0;
@@ -51,6 +52,9 @@ void NormalStage::Exit()
 		gameObjects[i].clear();
 		gameObjects[i].shrink_to_fit();
 	}
+	shared_ptr<Player> player = dynamic_pointer_cast<Player> (gameObjects[PLAYER][0]);
+
+	player->ClearBullets();
 }
 
 void NormalStage::SpawnEnemies(vector<vector<shared_ptr<Object>>>& gameObjects)
@@ -66,7 +70,7 @@ void NormalStage::SpawnEnemies(vector<vector<shared_ptr<Object>>>& gameObjects)
 
 	while (true)
 	{
-		if (cnt >= 1)
+		if (cnt >= 5)
 			break;
 
 		int edge = edges(gen); // 0-왼쪽, 1-오른쪽, 2-위쪽, 3-아래쪽
@@ -90,7 +94,7 @@ void NormalStage::SpawnEnemies(vector<vector<shared_ptr<Object>>>& gameObjects)
 
 		if (CollisionCheck(newPos, gameObjects))
 		{
-			gameObjects[MONSTER].push_back(make_shared<Monster>(newPos, 1, 180, 1, 50));
+			gameObjects[MONSTER].push_back(make_shared<Monster>(newPos, 50 * m_level, 500, 1, 50));
 			cnt++;
 		}
 	}
@@ -108,7 +112,7 @@ void NormalStage::GenerateObstacles(vector<vector<shared_ptr<Object>>>& gameObje
 
 	while (true)
 	{
-		if (cnt > 100)
+		if (cnt > 50)
 			break;
 
 		Point newPos = Point(width(gen), height(gen));

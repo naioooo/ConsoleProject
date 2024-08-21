@@ -5,6 +5,7 @@
 #include "HPUP.h"
 #include "AttackUP.h"
 #include "Money.h"
+#include "SpeedUP.h"
 
 Player::Player()
 {
@@ -15,7 +16,10 @@ Player::Player(const Point point, const int HP, const int speed, const int attac
 {
 	m_money = 1000;
 	m_skillCnt = {5, 5, 5};
+	m_speedCnt = 0.0f;
 	m_killCnt = 0;
+	m_reloadCnt = 200.f;
+	m_reInputCnt = 60.f;
 }
 
 Player::~Player()
@@ -50,12 +54,12 @@ void Player::Update(float elapsedTime)
 	m_bullets.erase(newEnd, m_bullets.end());
 }
 
-unsigned int Player::GetMoney()
+unsigned int Player::GetMoney() const
 {
 	return m_money;
 }
 
-int Player::GetKillCnt()
+int Player::GetKillCnt() const
 {
 	return m_killCnt;
 }
@@ -75,146 +79,100 @@ void Player::SetKillCnt(const int kill_cnt)
 	m_killCnt = kill_cnt;
 }
 
-void Player::Input()
+void Player::Input(const float elapsedTime)
 {
-	if (GetAsyncKeyState(VK_LEFT) & 0x8000) { //왼쪽
-		m_dir = LEFT;
-		Move();
+	
+	m_speedCnt += elapsedTime;
+
+	if (m_speedCnt > m_speed)
+	{		
+		if (GetAsyncKeyState(VK_LEFT) & 0x8000) { //왼쪽
+			m_dir = LEFT;
+			Move();
+		}
+		else if (GetAsyncKeyState(VK_RIGHT) & 0x8000) { //오른쪽	
+			m_dir = RIGHT;
+			Move();
+		}
+		else if (GetAsyncKeyState(VK_UP) & 0x8000) { //위
+			m_dir = UP;
+			Move();
+		}
+		else if (GetAsyncKeyState(VK_DOWN) & 0x8000) { //아래
+			m_dir = DOWN;
+			Move();
+		}
+
+		m_speedCnt = 0.0f;
+	}	
+
+	m_reInputCnt += elapsedTime;
+
+	if (m_reInputCnt > 60.0f)
+	{
+		if (GetAsyncKeyState('Q') & 0x8000)
+		{
+			if (m_money >= 1000)
+			{
+				m_money -= 1000;
+				m_skillCnt[0]++;
+
+				if (m_skillCnt[0] > 9)
+					m_skillCnt[0] = 9;
+			}
+			m_reInputCnt = 0.0f;
+		}
+		else if (GetAsyncKeyState('W') & 0x8000)
+		{
+			if (m_money >= 1000)
+			{
+				m_money -= 1000;
+				m_skillCnt[1]++;
+
+				if (m_skillCnt[1] > 9)
+					m_skillCnt[1] = 9;
+			}
+			m_reInputCnt = 0.0f;
+		}
+		else if (GetAsyncKeyState('E') & 0x8000)
+		{
+			if (m_money >= 1000)
+			{
+				m_money -= 1000;
+				m_skillCnt[2]++;
+
+				if (m_skillCnt[2] > 9)
+					m_skillCnt[2] = 9;
+			}
+			m_reInputCnt = 0.0f;
+		}
+
 	}
-	else if (GetAsyncKeyState(VK_RIGHT) & 0x8000) { //오른쪽	
-		m_dir = RIGHT;
-		Move();
-	}
-	else if (GetAsyncKeyState(VK_UP) & 0x8000) { //위
-		m_dir = UP;
-		Move();
-	}
-	else if (GetAsyncKeyState(VK_DOWN) & 0x8000) { //아래
-		m_dir = DOWN;
-		Move();
+
+
+	m_reloadCnt += elapsedTime;
+
+	if (m_reloadCnt < 200.0f)
+	{
+		return;
 	}
 
 	if (GetAsyncKeyState(VK_CONTROL) & 0x8000)
 	{
-		if (m_dir != 0)
-		{
-			Point bullet_pos = m_point;
-
-			switch (m_dir)
-			{
-			case LEFT:
-				bullet_pos.x -= 1;
-				break;
-			case RIGHT:
-				bullet_pos.x += 1;
-				break;
-			case UP:
-				bullet_pos.y -= 1;
-				break;
-			case DOWN:
-				bullet_pos.y += 1;
-				break;
-			}
-
-			shared_ptr<Bullet> bullet = make_shared<Bullet>(m_point, 5, m_dir, 1, 10);
-			m_bullets.push_back(bullet);
-		}
+		Attack();
 	}
 	else if (GetAsyncKeyState('A') & 0x8000)
 	{
-		if (m_skillCnt[0] > 0 && m_HP < 30)
-		{
-			m_HP++;
-			if (m_HP > 30)
-			{
-				m_HP = 30;
-			}
-
-			m_skillCnt[0]--;
-		}
+		HealingSkill();
 	}
 	else if (GetAsyncKeyState('S') & 0x8000)
 	{
-		if (m_skillCnt[1] > 0)
-		{
-			for (int dir = LEFT; dir <= RIGHTDOWN; dir++)
-			{
-				shared_ptr<Bullet> bullet = make_shared<Bullet>(m_point, 5, dir, 10, 3);
-				m_bullets.push_back(bullet);
-			}
-			m_skillCnt[1]--;
-		}
+		AreaOfEffectSkill();
 	}
 	else if (GetAsyncKeyState('D') & 0x8000 && m_dir != 0)
 	{
-		if (m_skillCnt[2] > 0)
-		{
-			Point bulletPos = m_point;
-
-			while (true)
-			{
-				switch (m_dir)
-				{
-				case LEFT:
-					bulletPos.x -= 1;
-					break;
-				case RIGHT:
-					bulletPos.x += 1;
-					break;
-				case UP:
-					bulletPos.y -= 1;
-					break;
-				case DOWN:
-					bulletPos.y += 1;
-					break;
-				}
-
-				if (!CollisionCheck(bulletPos))
-				{
-					break;
-				}
-
-				shared_ptr<Bullet> bullet = make_shared<Bullet>(bulletPos, 5, m_dir, 10, 1);
-				m_bullets.push_back(bullet);
-			}
-
-			m_skillCnt[2]--;
-		}		
-	}
-
-	if (GetAsyncKeyState('Q') & 0x8000)
-	{
-		if (m_money >= 1000)
-		{
-			m_money -= 1000;
-			m_skillCnt[0]++;
-
-			if (m_skillCnt[0] > 9)
-				m_skillCnt[0] = 9;
-		}
-	}
-	else if (GetAsyncKeyState('W') & 0x8000)
-	{
-		if (m_money >= 1000)
-		{
-			m_money -= 1000;
-			m_skillCnt[1]++;
-
-			if (m_skillCnt[1] > 9)
-				m_skillCnt[1] = 9;
-		}
-	}
-	else if (GetAsyncKeyState('E') & 0x8000)
-	{
-		if (m_money >= 1000)
-		{
-			m_money -= 1000;
-			m_skillCnt[2]++;
-
-			if (m_skillCnt[2] > 9)
-				m_skillCnt[2] = 9;
-		}
-	}
+		LaserSkill();
+	}	
 }
 
 void Player::Move()
@@ -226,25 +184,25 @@ void Player::Move()
 	case LEFT:
 		if (next.x > 0)
 		{
-			next.x -= m_speed;
+			next.x--;
 		}
 		break;
 	case RIGHT:
 		if (next.x < MAX_WIDTH - 1)
 		{
-			next.x += m_speed;
+			next.x++;
 		}
 		break;
 	case UP:
 		if (next.y > 0)
 		{
-			next.y -= m_speed;
+			next.y--;
 		}
 		break;
 	case DOWN:
 		if (next.y < MAX_HEIGHT - 1)
 		{
-			next.y += m_speed;
+			next.y++;
 		}
 		break;
 	default:
@@ -259,6 +217,30 @@ void Player::Move()
 
 void Player::Attack()
 {
+	if (m_dir != 0)
+	{
+		Point bullet_pos = m_point;
+
+		switch (m_dir)
+		{
+		case LEFT:
+			bullet_pos.x -= 1;
+			break;
+		case RIGHT:
+			bullet_pos.x += 1;
+			break;
+		case UP:
+			bullet_pos.y -= 1;
+			break;
+		case DOWN:
+			bullet_pos.y += 1;
+			break;
+		}
+
+		shared_ptr<Bullet> bullet = make_shared<Bullet>(m_point, m_speed - 20, m_dir, 50, 100);
+		m_bullets.push_back(bullet);
+		m_reloadCnt = 0.0f;
+	}
 }
 
 bool Player::CollisionCheck(Point point)
@@ -333,11 +315,93 @@ bool Player::CollisionCheck(Point point)
 					m_money = 99999;
 				}
 			}
+			else if (name == "S")
+			{
+				shared_ptr<SpeedUP> speedUP = dynamic_pointer_cast<SpeedUP>(item);
+				m_speed -= speedUP->GetSpeedUP();
+				if (m_speed < 20)
+				{
+					m_speed = 20;
+				}
+			}
 
 			item->SetAlive(false);
 		}
 	}
 
 	return true;
+}
+
+void Player::ClearBullets()
+{
+	m_bullets.clear();
+	m_bullets.shrink_to_fit();
+}
+
+void Player::HealingSkill()
+{
+	if (m_skillCnt[0] > 0 && m_HP < 30)
+	{
+		m_HP++;
+		if (m_HP > 30)
+		{
+			m_HP = 30;
+		}
+
+		m_skillCnt[0]--;
+		m_reloadCnt = 0.0f;
+	}
+}
+
+void Player::AreaOfEffectSkill()
+{
+	if (m_skillCnt[1] > 0)
+	{
+		for (int dir = LEFT; dir <= RIGHTDOWN; dir++)
+		{
+			shared_ptr<Bullet> bullet = make_shared<Bullet>(m_point, m_speed - 20, dir, 50, 100);
+			m_bullets.push_back(bullet);
+		}
+		m_skillCnt[1]--;
+		m_reloadCnt = 0.0f;
+	}
+}
+
+void Player::LaserSkill()
+{
+	if (m_skillCnt[2] > 0)
+	{
+		Point bulletPos = m_point;
+
+		while (true)
+		{
+			switch (m_dir)
+			{
+			case LEFT:
+				bulletPos.x -= 1;
+				break;
+			case RIGHT:
+				bulletPos.x += 1;
+				break;
+			case UP:
+				bulletPos.y -= 1;
+				break;
+			case DOWN:
+				bulletPos.y += 1;
+				break;
+			}
+
+			if (!CollisionCheck(bulletPos))
+			{
+				break;
+			}
+
+			shared_ptr<Bullet> bullet = make_shared<Bullet>(bulletPos, m_speed, 0, 50, 10);
+			m_bullets.push_back(bullet);
+		}
+
+		m_skillCnt[2]--;
+		m_reloadCnt = 0.0f;
+	}
 }
 

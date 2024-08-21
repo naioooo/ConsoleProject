@@ -27,7 +27,7 @@ public:
 	void Update(float elapsedTime) override;
 	void Draw() override;
 	void DrawUI();
-	void Input() override;
+	void Input(float elapsedTime);
 	void ChangeScene() override; // 조건 체크 메서드
 
 

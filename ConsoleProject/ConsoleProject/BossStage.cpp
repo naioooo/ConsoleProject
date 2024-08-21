@@ -1,11 +1,17 @@
 #include "BossStage.h"
 #include "GameScene.h"
+#include "Item.h"
+#include "HPUP.h"
+#include "AttackUP.h"
+#include "Money.h"
+#include "SpeedUP.h"
 
-void BossStage::Enter()
+void BossStage::Enter(int currentStageIndex)
 {
 	vector<vector<shared_ptr<Object>>>& gameObjects{ GameScene::m_gameObjects };
 
 	gameObjects[PLAYER][0]->SetPoint(Point(MAX_WIDTH / 2 - 10, MAX_HEIGHT / 2));
+	m_spawnTick = 250;
 	GenerateObstacles(gameObjects);
 	GenerateEnemies(gameObjects);
 }
@@ -13,6 +19,14 @@ void BossStage::Enter()
 void BossStage::Update(float elapsedTime)
 {
 	vector<vector<shared_ptr<Object>>>& gameObjects{ GameScene::m_gameObjects };
+
+	if (m_spawnTick > 300)
+	{
+		SpawnItems(gameObjects);
+		m_spawnTick = 0;
+	}
+
+	m_spawnTick++;
 
 	for (auto& objects : gameObjects)
 	{
@@ -60,7 +74,7 @@ bool BossStage::IsStageComplete(int level)
 void BossStage::GenerateEnemies(vector<vector<shared_ptr<Object>>>& gameObjects)
 {
 	Point center{ MAX_WIDTH / 2 + 10 , MAX_HEIGHT / 2 };
-	gameObjects[MONSTER].push_back(make_shared<BossMonster>(center, 30, 180, 50, 50));
+	gameObjects[MONSTER].push_back(make_shared<BossMonster>(center, 3000, 180, 50, 50));
 }
 
 void BossStage::GenerateObstacles(vector<vector<shared_ptr<Object>>>& gameObjects)
@@ -120,8 +134,60 @@ void BossStage::GenerateObstacles(vector<vector<shared_ptr<Object>>>& gameObject
 
 }
 
+void BossStage::SpawnItems(vector<vector<shared_ptr<Object>>>& gameObjects)
+{
+	random_device rd;
+	mt19937 gen(rd());
+
+	uniform_int_distribution<int> width(0, MAX_WIDTH - 1);
+	uniform_int_distribution<int> height(0, MAX_HEIGHT - 1);	
+	uniform_int_distribution<int> rand(0, 3);
+
+	Point newPos{};	 
+	shared_ptr<Item> item;
+
+	while (true)
+	{
+		newPos = Point{ width(gen), height(gen) };
+
+		if (CollisionCheck(newPos, gameObjects))
+		{
+			break;
+		}
+	}
+
+	switch (rand(gen))
+	{
+	case 0:
+		item = make_shared<AttackUP>(newPos, 1000, 30);
+		break;
+	case 1:
+		item = make_shared<HpUP>(newPos, 1000, 1);
+		break;
+	case 2:
+		item = make_shared<Money>(newPos, 1000, 1000);
+		break;
+	case 3:
+		item = make_shared<SpeedUP>(newPos, 1000, 10);
+		break;
+	}
+
+	gameObjects[ITEM].push_back(item);
+}
+
 bool BossStage::CollisionCheck(Point point, vector<vector<shared_ptr<Object>>>& gameObjects)
 {
-	return false;
+	for (int i = 0; i < 4; i++)
+	{
+		for (auto& object : gameObjects[i])
+		{
+			if (object->GetPoint() == point)
+			{
+				return false;
+			}
+		}
+	}
+
+	return true;
 }
 

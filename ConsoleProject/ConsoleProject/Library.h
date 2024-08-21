@@ -16,6 +16,7 @@
 
 #include <random>
 #include <limits>
+#include <chrono>
 
 
 using namespace std;
@@ -32,10 +33,11 @@ using namespace std;
 #define CH_MONSTER3 '^'
 #define CH_PLAYER 'O'
 #define CH_BULLET '*'
-#define CH_fireBall 'o'
+#define CH_FIREBALL 'o'
 #define CH_HPUP '+'
 #define CH_ATTACKUP 'A'
 #define CH_MONEY '$'
+#define CH_SPEEDUP 'S'
 #define CH_BOSS1 '('
 #define CH_BOSS2 '~'
 #define CH_BOSS3 ')'
@@ -123,7 +125,7 @@ struct Node
 {
 	Point position;
 	float gCost, hCost; // gCost: 시작점에서 이 노드까지의 실제 거리, hCost: 이 노드에서 목표까지의 추정 거리
-	Node* parent;
+	shared_ptr<Node> parent;
 
 	// fCost 계산
 	float fCost() const; 
@@ -148,18 +150,14 @@ namespace std
 	};
 }
 
-void gotoxy(int x, int y);
-void gotoxy(Point p);
-void gotoxy(COORD coord);
+void GoToXY(int x, int y);
+void GoToXY(Point p);
+void GoToXY(COORD coord);
 
-bool tick(float& startTime, float& elapsedTime);
+void TextColor(int colorNum);
 
-void textcolor(int colorNum);
-
-float distance(Point& a, Point& b);
+float Distance(Point& a, Point& b);
 float Heuristic(Point a, Point b);
-
-void setconsole();
-
-float CalculateAngle(Point a, Point b);
 int DetermineDirection(Point a, Point b);
+
+void SetConsole();

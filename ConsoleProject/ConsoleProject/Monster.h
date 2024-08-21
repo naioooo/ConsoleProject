@@ -21,7 +21,7 @@ public:
 	~Monster();
 
 	vector<int> GetPath();
-	Point GetChasePoint();
+	Point GetChasePoint() const;
 
 	void SetChasePoint(Point point);
 	void SetState(int state);
@@ -34,7 +34,8 @@ public:
 	virtual bool CollisionCheck(Point point) override;
 
 	virtual bool IsValidPoint(Point point);
-	void AStar(Point goal);
+	virtual void AStar(Point goal);
+	virtual bool IsFindPoint(shared_ptr<Node> current, Point goal);
 
 	bool isObstacle(int x, int y);
 	bool LineOfSight(const Point& start, const Point& end);

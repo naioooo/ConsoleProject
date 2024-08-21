@@ -22,14 +22,17 @@ public:
 	void InsertBuffer(vector<string>& buffer) override;
 	void Update(float elapsedTime) override;
 	void Move(const int dir) override;
-	bool CollisionCheck(Point point) override;
-	bool IsValidPoint(Point point) override;
 
-	int GetCoolTime();
-	int GetCoolTimeCnt();
-	int GetIsAttack();
-	int GetAttackTime();
-	int GetAttackTimeCnt();
+	bool CollisionCheck(Point point) override;
+
+	bool IsValidPoint(Point point) override;
+	bool IsFindPoint(shared_ptr<Node> current, Point goal) override;
+
+	int GetCoolTime() const;
+	int GetCoolTimeCnt() const;
+	int GetIsAttack() const;
+	int GetAttackTime() const;
+	int GetAttackTimeCnt() const;
 
 	void SetCoolTime(int coolTime);
 	void SetCoolTimeCnt(int coolTimeCnt);
@@ -42,6 +45,6 @@ public:
 	void ExplosiveFireBall(int width, int height); // 전역 폭발
 	void MeteorFireBall(); // 메테오
 	void DirectionalBlast(); // 장풍
-	void fireBallfromMapEdges(); // 맵끝에서 발사
+	void FireBallFromMapEdges(); // 맵끝에서 발사
 };
 

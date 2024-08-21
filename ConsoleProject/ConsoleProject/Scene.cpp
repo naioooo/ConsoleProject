@@ -13,6 +13,6 @@ void Scene::Draw()
 {
 }
 
-void Scene::Input()
+void Scene::Input(float elapsedTime)
 {
 }

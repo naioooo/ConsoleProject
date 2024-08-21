@@ -93,7 +93,7 @@ NodeState Boss_AttackActionNode::Tick(shared_ptr<Monster>& owner)
         boss->DirectionalBlast();
         break;
     case 6:
-        boss->fireBallfromMapEdges();
+        boss->FireBallFromMapEdges();
         break;
     }
 

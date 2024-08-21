@@ -7,7 +7,7 @@ private:
 
 public:
     AttackUP();
-    AttackUP(const Point point, const int lifetime, const int AttackUP);
+    AttackUP(const Point point, const int lifetime, const int attackUP);
     ~AttackUP();
 
     int GetAttackUP();

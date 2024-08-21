@@ -1,15 +1,8 @@
 #pragma once
-#include "Object.h"
-class FireBall : public Object
+#include "Projectile.h"
+class FireBall : public Projectile
 {
 private:
-	float m_speedCnt;
-	int m_dir;
-	int m_damage;
-
-	int m_lifetime;
-	int m_lifetimeCnt;
-
 
 public:
 	FireBall();
@@ -17,9 +10,6 @@ public:
 	~FireBall();
 
 	void InsertBuffer(vector<string>& buffer) override;
-	void Update(float elapsedTime) override;
-
-	void Move(float elapsedTime);
 	bool CollisionCheck(Point point) override;
 };
 

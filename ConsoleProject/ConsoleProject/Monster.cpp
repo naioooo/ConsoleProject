@@ -44,7 +44,7 @@ vector<int> Monster::GetPath()
 	return m_path;
 }
 
-Point Monster::GetChasePoint()
+Point Monster::GetChasePoint() const
 {
 	return m_chasePoint;
 }
@@ -78,8 +78,12 @@ void Monster::InsertBuffer(vector<string>& buffer)
 void Monster::Update(float elapsedTime)
 {
 	m_speedCnt += elapsedTime;
-
-	if (m_speedCnt > m_speed)
+	int speed = m_speed;
+	if (m_state == CHASE)
+	{
+		speed = speed / 3;
+	}
+	if (m_speedCnt > speed)
 	{
 		auto self = static_pointer_cast<Monster>(shared_from_this());
 		m_behaviorTree->Tick(self);
@@ -177,11 +181,11 @@ void Monster::AStar(Point goal)
 	vector<vector<shared_ptr<Object>>>& gameObjects{ GameScene::m_gameObjects };
 
 	Point start = m_point;
-	priority_queue<Node*, vector<Node*>, greater<Node*>> openSet;
-	unordered_map<Point, Node*> allNodes;
+	priority_queue<shared_ptr<Node>, vector<shared_ptr<Node>>, greater<shared_ptr<Node>>> openSet;
+	unordered_map<Point, shared_ptr<Node>> allNodes;
 
-	Node* startNode = new Node{ start , 0, Heuristic(start, goal), nullptr };
-	openSet.push(startNode); 
+	auto startNode = make_shared<Node>(Node{ start, 0, Heuristic(start, goal), nullptr });
+	openSet.push(startNode);
 	allNodes[start] = startNode;
 
 	while (true)
@@ -191,13 +195,13 @@ void Monster::AStar(Point goal)
 			break;
 		}
 
-		Node* current = openSet.top();
+		auto current = openSet.top();
 		openSet.pop();
 
-		if (current->position == goal) 
+		if (IsFindPoint(current, goal))
 		{
 			vector<int> pathDirections;
-			Node* node = current;
+			auto node = current;
 			while (node->parent)
 			{
 				if (node->position.x == node->parent->position.x - 1) 
@@ -232,7 +236,7 @@ void Monster::AStar(Point goal)
 			{
 				float newGCost = current->gCost + 1.0f;
 				float newHCost = Heuristic(newPos, goal);
-				Node* neighbor = nullptr;
+				shared_ptr<Node> neighbor = nullptr;
 
 				if (allNodes.count(newPos)) 
 				{
@@ -242,7 +246,7 @@ void Monster::AStar(Point goal)
 				}
 				else 
 				{
-					neighbor = new Node{ newPos, (std::numeric_limits<float>::max)(), newHCost, current };
+					neighbor = make_shared<Node>(Node{ newPos, (std::numeric_limits<float>::max)(), newHCost, current });
 					allNodes[newPos] = neighbor;
 				}
 
@@ -253,6 +257,14 @@ void Monster::AStar(Point goal)
 	}
 
 	return; 
+}
+
+bool Monster::IsFindPoint(shared_ptr<Node> current, Point goal)
+{
+	if (current->position == goal)
+		return true;
+	
+	return false;
 }
 
 // 장애물 체크 함수
@@ -315,7 +327,7 @@ bool Monster::LineOfSight(const Point& start, const Point& end)
 
 bool Monster::isDetected(Point goal)
 {
-	float dist = distance(m_point, goal);
+	float dist = Distance(m_point, goal);
 
 	if (dist <= m_detectionRange)
 	{
@@ -330,7 +342,7 @@ bool Monster::isDetected(Point goal)
 
 bool Monster::isAttacked(Point goal)
 {
-	float dist = distance(m_point, goal);
+	float dist = Distance(m_point, goal);
 
 	if (dist <= m_attackRange)
 	{

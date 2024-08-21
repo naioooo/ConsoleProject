@@ -4,8 +4,8 @@ AttackUP::AttackUP()
 {
 }
 
-AttackUP::AttackUP(const Point point, const int lifetime, const int AttackUP)
-	: Item(point, lifetime), m_AttackUP(AttackUP)
+AttackUP::AttackUP(const Point point, const int lifetime, const int attackUP)
+	: Item(point, lifetime), m_AttackUP(attackUP)
 {
 	m_name = "A";
 }

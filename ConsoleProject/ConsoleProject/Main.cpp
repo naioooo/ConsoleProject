@@ -1,12 +1,10 @@
 #pragma once
 #include "SceneManager.h"
+#include "TimeManager.h"
 
 int main()
 {
-	setconsole();
-
-	float currentTime = GetTickCount64();
-	float elapsedTime{};
+	SetConsole();
 
 	auto& sceneManager = SceneManager::Instance();
 
@@ -16,9 +14,13 @@ int main()
 	
 	sceneManager.ChangeScene("Title");
 
+	const int fps = 60; // ∏Ò«• FPS
+	FrameRateManager frame(fps);
+	float elapsedTime{};
+
 	while (true)
 	{
-		if (tick(currentTime, elapsedTime))
+		if (frame.tick(elapsedTime))
 		{
 			sceneManager.Update(elapsedTime);
 		}

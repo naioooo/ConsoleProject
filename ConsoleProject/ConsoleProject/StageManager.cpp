@@ -12,7 +12,7 @@ void StageManager::EnterStage()
 {
     if (currentStageIndex < stages.size()) 
     {
-        stages[currentStageIndex]->Enter();
+        stages[currentStageIndex]->Enter(currentStageIndex);
     }
 }
 

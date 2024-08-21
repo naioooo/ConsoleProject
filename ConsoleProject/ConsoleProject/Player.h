@@ -11,7 +11,8 @@ private:
 	unsigned int m_money;
 
 	vector<int> m_skillCnt;
-	int m_reloadCnt;	
+	float m_reloadCnt;	
+	float m_reInputCnt;	
 	int m_killCnt;
 
 public:
@@ -22,16 +23,22 @@ public:
 	void InsertBuffer(vector<string>& buffer) override;
 	void Update(float elapsedTime) override;
 
-	unsigned int GetMoney();
-	int GetKillCnt();
+	unsigned int GetMoney() const;
+	int GetKillCnt() const;
 	vector<int> GetSkillCnt();
 
 	void SetMoney(const unsigned int money);
 	void SetKillCnt(const int killCnt);
 
-	void Input();
+	void Input(const float elapsedTime);
 	void Move() override;
 	void Attack() override;
 	bool CollisionCheck(Point point) override;
+
+	void ClearBullets();
+
+	void HealingSkill();
+	void AreaOfEffectSkill();
+	void LaserSkill();
 };
 

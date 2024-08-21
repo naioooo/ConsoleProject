@@ -22,7 +22,7 @@ void GameScene::Enter()
 	}
 
 	m_gameObjects.resize(4);
-	m_gameObjects[PLAYER].push_back(make_shared <Player>(Point(MAX_WIDTH / 2, MAX_HEIGHT / 2), 30, 1, 50, 50, "호날두"));
+	m_gameObjects[PLAYER].push_back(make_shared <Player>(Point(MAX_WIDTH / 2, MAX_HEIGHT / 2), 30, 120, 50, 50, "호날두"));
 	m_player = dynamic_pointer_cast<Player>(m_gameObjects[PLAYER][0]);
 
 	DrawUI();
@@ -56,7 +56,7 @@ void GameScene::Exit()
 
 void GameScene::Update(float elapsedTime)
 {
-	Input();
+	Input(elapsedTime);
 	m_stageManager->UpdateStage(elapsedTime);
 	Draw();
 	ChangeScene();
@@ -86,7 +86,7 @@ void GameScene::Draw()
 	int x = 5;
 	int y = 5;
 	string str;
-	gotoxy(x, y);
+	GoToXY(x, y);
 
 	for (const auto& str : m_buffer)
 	{
@@ -95,50 +95,54 @@ void GameScene::Draw()
 			switch (ch)
 			{
 			case CH_OBSTACLE:
-				textcolor(WHITE);
+				TextColor(WHITE);
+				//TextColor(WHITE | WHITE<<4);
 				break;
-			case CH_fireBall:
-				textcolor(RED);
+			case CH_FIREBALL:
+				TextColor(RED);
 				break;
 			case CH_MONSTER1:
 			case CH_MONSTER2:
 			case CH_MONSTER3:
-				textcolor(DarkRed);
+				TextColor(DarkRed);
 				break;
 			case CH_BOSS1:
 			case CH_BOSS2:
 			case CH_BOSS3:
-				textcolor(DarkPurple);
+				TextColor(DarkPurple);
 				break;
 			case CH_PLAYER:
-				textcolor(BLUE);
+				TextColor(BLUE);
 				break;
 			case CH_BULLET:
-				textcolor(DarkYellow);
+				TextColor(DarkYellow);
 				break;
 			case CH_HPUP:
-				textcolor(DarkGreen);
+				TextColor(DarkGreen);
 				break;
 			case CH_MONEY:
-				textcolor(YELLOW);
+				TextColor(YELLOW);
+				break;
+			case CH_SPEEDUP:
+				TextColor(darkSkyBlue);
 				break;
 			case CH_ATTACKUP:
-				textcolor(PURPLE);
+				TextColor(PURPLE);
 				break;
 			}
 
 			cout << ch;
-			textcolor(BLACK);
+			TextColor(BLACK);
 		}
-		gotoxy(x, ++y);
+		GoToXY(x, ++y);
 	}		
 
 	// 게임 정보 출력
-	x = 72;
-	y = 6;
-	gotoxy(x, y);
+	x = 75;
+	y = 9;
+	GoToXY(x, y);
 
-	textcolor(RED);
+	TextColor(RED);
 	cout << "HP : ";
 	for (int i = 0; i < 30; i++)
 	{
@@ -160,8 +164,8 @@ void GameScene::Draw()
 	}
 
 	y++;
-	gotoxy(x, y);
-	textcolor(YELLOW);
+	GoToXY(x, y);
+	TextColor(YELLOW);
 	cout << "MONEY : "; 
 	str = "";
 	if (m_player != nullptr)
@@ -181,8 +185,8 @@ void GameScene::Draw()
 	}
 
 	y++;
-	gotoxy(x, y);
-	textcolor(YELLOW);
+	GoToXY(x, y);
+	TextColor(DarkRed);
 	cout << "ATTACK : ";
 	str = "";
 	if (m_player != nullptr)
@@ -202,8 +206,29 @@ void GameScene::Draw()
 	}
 
 	y++;
-	gotoxy(x, y);
-	textcolor(YELLOW);
+	GoToXY(x, y);
+	TextColor(darkSkyBlue);
+	cout << "SPEED : ";
+	str = "";
+	if (m_player != nullptr)
+	{
+		str = to_string(120 - m_player->GetSpeed());
+	}
+	for (int i = 0; i < 4; i++)
+	{
+		if (i < str.length())
+		{
+			cout << str[i];
+		}
+		else
+		{
+			cout << " ";
+		}
+	}
+
+	y++;
+	GoToXY(x, y);
+	TextColor(RED);
 
 	int idx = m_stageManager->GetCurrentStageIndex();
 
@@ -214,7 +239,7 @@ void GameScene::Draw()
 		{
 			shared_ptr<BossMonster> boss = dynamic_pointer_cast<BossMonster> (m_gameObjects[MONSTER][0]);
 
-			for (int i = 0; i < 30; i++)
+			for (int i = 0; i < 3000; i += 100)
 			{
 				if (i < boss->GetHP())
 				{
@@ -256,61 +281,52 @@ void GameScene::Draw()
 		cout << " / " << (m_stageManager->GetCurrentStageIndex() + 1) * 10;
 	}
 
-	
-
-
 	/////////
-	x = 72;
-	y = 19;
-	gotoxy(x, y);
+	x = 75;
+	y += 5;
+	TextColor(WHITE);
+	GoToXY(x, y);
 	cout << "skill : ";
 
-
 	x += 8;
-	gotoxy(x, y);
-	textcolor(YELLOW);
+	GoToXY(x, y);
 	cout << " 회복";
 
 	x += 9;
-	gotoxy(x, y);
-	textcolor(YELLOW);
+	GoToXY(x, y);
 	cout << " 흩뿌리기";
 
 	x += 12;
-	gotoxy(x, y);
-	textcolor(YELLOW);
+	GoToXY(x, y);
 	cout << " 레이저";
 
 	//
 
-	x = 72;
-	y = 20;
-	gotoxy(x, y);
+	x = 75;
+	y++;
+	GoToXY(x, y);
 	cout << "cost  : ";
 
 	x += 8;
-	gotoxy(x, y);
-	textcolor(YELLOW);
+	GoToXY(x, y);
 	cout << " 500 ";
 
 	x += 9;
-	gotoxy(x, y);
-	textcolor(YELLOW);
+	GoToXY(x, y);
 	cout << " 1000";
 
 	x += 12;
-	gotoxy(x, y);
-	textcolor(YELLOW);
+	GoToXY(x, y);
 	cout << " 1000";
 
 	/////////
-	x = 72;
-	y = 21;
-	gotoxy(x, y);
+	x = 75;
+	y++;
+	GoToXY(x, y);
 	cout << "count : ";
 
 	x += 9;
-	gotoxy(x, y);
+	GoToXY(x, y);
 	str = "";
 	if (m_player != nullptr)
 	{
@@ -329,7 +345,7 @@ void GameScene::Draw()
 	}
 
 	x += 9;
-	gotoxy(x, y);
+	GoToXY(x, y);
 	str = "";
 	if (m_player != nullptr)
 	{
@@ -348,7 +364,7 @@ void GameScene::Draw()
 	}
 
 	x += 12;
-	gotoxy(x, y);
+	GoToXY(x, y);
 	str = "";
 	if (m_player != nullptr)
 	{
@@ -378,19 +394,18 @@ void GameScene::DrawUI()
 
 	int x = 50;
 	int y = 2;
-	gotoxy(x, y);
+	GoToXY(x, y);
 
 	cout << " SHOOTING GAME" << endl;
-
 
 	x = 4;
 	y = 4;
 	int width = MAX_WIDTH;
 	int height = MAX_HEIGHT;
 
-	textcolor(WHITE);
+	TextColor(WHITE);
 
-	gotoxy(x, y);
+	GoToXY(x, y);
 	cout << s1;
 	for (int i = 0; i < width; i++)
 	{
@@ -400,7 +415,7 @@ void GameScene::DrawUI()
 
 	for (int i = 1; i <= height; i++)
 	{
-		gotoxy(x, y + i);
+		GoToXY(x, y + i);
 		cout << s6;
 		for (int j = 0; j < width; j++)
 		{
@@ -409,7 +424,7 @@ void GameScene::DrawUI()
 		cout << s6 ;
 	}
 
-	gotoxy(x, y + height + 1);
+	GoToXY(x, y + height + 1);
 	cout << s3;
 	for (int i = 0; i < width; i++)
 	{
@@ -422,7 +437,7 @@ void GameScene::DrawUI()
 	x = 70; y = 4;
 	width = 45; height = 20;
 
-	gotoxy(x, y);
+	GoToXY(x, y);
 	cout << s1;
 	for (int i = 0; i < width; i++)
 	{
@@ -432,7 +447,7 @@ void GameScene::DrawUI()
 
 	for (int i = 1; i <= height; i++)
 	{
-		gotoxy(x, y + i);
+		GoToXY(x, y + i);
 		cout << s6;
 		for (int j = 0; j < width; j++)
 		{
@@ -441,7 +456,7 @@ void GameScene::DrawUI()
 		cout << s6;
 	}
 
-	gotoxy(x, y + height + 1);
+	GoToXY(x, y + height + 1);
 	cout << s3;
 	for (int i = 0; i < width; i++)
 	{
@@ -451,9 +466,9 @@ void GameScene::DrawUI()
 	
 }
 
-void GameScene::Input()
+void GameScene::Input(float elapsedTime)
 {
-	m_player->Input();
+	m_player->Input(elapsedTime);
 }
 
 void GameScene::ChangeScene()
