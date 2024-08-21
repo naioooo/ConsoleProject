@@ -15,22 +15,22 @@ Character::~Character()
 {
 }
 
-int Character::GetHP()
+int Character::GetHP() const
 {
 	return m_HP;
 }
 
-int Character::GetSpeed()
+int Character::GetSpeed() const
 {
 	return m_speed;
 }
 
-int Character::GetAttack()
+int Character::GetAttack() const
 {
 	return m_attack;
 }
 
-int Character::GetDefense()
+int Character::GetDefense() const
 {
 	return m_defense;
 }

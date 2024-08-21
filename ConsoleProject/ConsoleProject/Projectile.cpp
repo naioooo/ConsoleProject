@@ -7,7 +7,6 @@ Projectile::Projectile()
 Projectile::Projectile(const Point point, const int speed, const int dir, const int damage, const int lifetime)
 	: Object(point), m_speed(speed), m_dir(dir), m_damage(damage), m_lifetime(lifetime)
 {
-
 	m_speedCnt = 0;
 	m_lifetimeCnt = 0;
 }

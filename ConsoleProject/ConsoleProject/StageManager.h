@@ -16,7 +16,6 @@ public:
     void ExitStage();
     void NextStage();
 
-    Stage* GetCurrentStage();
     size_t GetCurrentStageIndex() const;
     size_t GetStagesSize() const;
 };

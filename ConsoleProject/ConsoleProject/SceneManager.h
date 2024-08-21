@@ -10,18 +10,12 @@ private:
     std::unordered_map<std::string, std::shared_ptr<Scene>> scenes;
     std::shared_ptr<Scene> currentScene;
 
-    SceneManager() = default;
 public: 
+    SceneManager();
 
     //½Ì±ÛÅæ ÆĞÅÏ
     static SceneManager& Instance();
-
-    // ¾À Ãß°¡
     void AddScene(const string& name, shared_ptr<Scene> scene);
-
-    // ¾À ÀüÈ¯
     void ChangeScene(const std::string& name);
-
-    // ¾À ¾÷µ¥ÀÌÆ®
     void Update(float elapsedTime);
 };

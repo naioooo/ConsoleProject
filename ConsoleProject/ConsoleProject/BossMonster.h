@@ -7,9 +7,11 @@ class BossMonster : public Monster
 {
 private:
 	vector<shared_ptr<FireBall>> m_fireBall;
+
+	int m_isAttack;
+
 	int m_coolTime;
 	int m_coolTimeCnt;
-	int m_isAttack;
 
 	int m_attackTime;
 	int m_attackTimeCnt;

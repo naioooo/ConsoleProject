@@ -64,7 +64,7 @@ void NormalStage::SpawnEnemies(vector<vector<shared_ptr<Object>>>& gameObjects)
 
 	uniform_int_distribution<int> width(0, MAX_WIDTH - 1);
 	uniform_int_distribution<int> height(0, MAX_HEIGHT - 1);
-	uniform_int_distribution<int> edges(0, 3);
+	uniform_int_distribution<int> edges(1, 4);
 
 	int cnt = 0;
 
@@ -75,21 +75,21 @@ void NormalStage::SpawnEnemies(vector<vector<shared_ptr<Object>>>& gameObjects)
 
 		int edge = edges(gen); // 0-哭率, 1-坷弗率, 2-困率, 3-酒贰率
 		Point newPos{};
-		if (edge == 0) 
-		{ // 哭率 场
+
+		switch (edge)
+		{
+		case LEFT:
 			newPos = Point(0, height(gen));
-		}
-		else if (edge == 1) 
-		{ // 坷弗率 场
+			break;
+		case RIGHT:
 			newPos = Point(MAX_WIDTH - 1, height(gen));
-		}
-		else if (edge == 2)
-		{ // 困率 场
+			break;
+		case UP:
 			newPos = Point(width(gen), 0);
-		}
-		else if (edge == 3)
-		{ // 酒贰率 场
+			break;
+		case DOWN:
 			newPos = Point(width(gen), MAX_HEIGHT - 1);
+			break;
 		}
 
 		if (CollisionCheck(newPos, gameObjects))
@@ -105,24 +105,40 @@ void NormalStage::GenerateObstacles(vector<vector<shared_ptr<Object>>>& gameObje
 	random_device rd;
 	mt19937 gen(rd());
 
-	uniform_int_distribution<int> width(0, MAX_WIDTH - 1);
-	uniform_int_distribution<int> height(0, MAX_HEIGHT - 1);
+	uniform_int_distribution<int> widths(2, 4);
+	uniform_int_distribution<int> heights(2, 4);
 
+	
 	int cnt = 0;
 
 	while (true)
 	{
-		if (cnt > 50)
+		if (cnt > 30)
 			break;
 
-		Point newPos = Point(width(gen), height(gen));
+		int width = widths(gen);
+		int height = heights(gen);
 
+		uniform_int_distribution<int> x(1, MAX_WIDTH - width - 1);
+		uniform_int_distribution<int> y(1, MAX_HEIGHT - height - 1);
 
-		if (CollisionCheck(newPos, gameObjects))
+		int startX = x(gen);
+		int startY = y(gen);
+
+		for (int i = 0; i < height; i++)
 		{
-			gameObjects[OBSTACLE].push_back(make_shared<Object>(newPos));
-			cnt++;
+			for (int j = 0; j < width; j++)
+			{
+				Point newPos = Point(startX + j, startY + i);
+
+				if (CollisionCheck(newPos, gameObjects))
+				{
+					gameObjects[OBSTACLE].push_back(make_shared<Object>(newPos));					
+				}
+			}
 		}
+
+		cnt++;
 	}
 }
 

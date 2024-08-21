@@ -11,8 +11,6 @@ protected:
 	float m_detectionRange;
 	float m_attackRange;
 
-	Point m_chasePoint;
-
 	int m_state;
 
 public:
@@ -21,9 +19,7 @@ public:
 	~Monster();
 
 	vector<int> GetPath();
-	Point GetChasePoint() const;
 
-	void SetChasePoint(Point point);
 	void SetState(int state);
 
 	virtual void InsertBuffer(vector<string>& buffer) override;

@@ -99,7 +99,6 @@ bool Bullet::CollisionCheck(Point point)
 			}
 
 			monster->SetHP(HP);
-
 			return false;
 		}
 	}

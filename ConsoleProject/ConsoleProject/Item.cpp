@@ -13,7 +13,7 @@ Item::~Item()
 {
 }
 
-string Item::GetName()
+string Item::GetName() const
 {
 	return m_name;
 }

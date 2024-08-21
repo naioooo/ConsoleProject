@@ -13,7 +13,6 @@ public:
     void Exit() override; 
     bool IsStageComplete(int level) override;
 
-    // 적과 장애물 생성 메서드
     void SpawnEnemies(vector<vector<shared_ptr<Object>>>& gameObjects);
     void GenerateObstacles(vector<vector<shared_ptr<Object>>>& gameObjects);
     bool CollisionCheck(Point point, vector<vector<shared_ptr<Object>>>& gameObjects);

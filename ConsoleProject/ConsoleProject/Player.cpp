@@ -112,14 +112,15 @@ void Player::Input(const float elapsedTime)
 	{
 		if (GetAsyncKeyState('Q') & 0x8000)
 		{
-			if (m_money >= 1000)
+			if (m_money >= 500)
 			{
-				m_money -= 1000;
+				m_money -= 500;
 				m_skillCnt[0]++;
 
 				if (m_skillCnt[0] > 9)
 					m_skillCnt[0] = 9;
 			}
+
 			m_reInputCnt = 0.0f;
 		}
 		else if (GetAsyncKeyState('W') & 0x8000)
@@ -132,6 +133,7 @@ void Player::Input(const float elapsedTime)
 				if (m_skillCnt[1] > 9)
 					m_skillCnt[1] = 9;
 			}
+
 			m_reInputCnt = 0.0f;
 		}
 		else if (GetAsyncKeyState('E') & 0x8000)
@@ -144,11 +146,10 @@ void Player::Input(const float elapsedTime)
 				if (m_skillCnt[2] > 9)
 					m_skillCnt[2] = 9;
 			}
+
 			m_reInputCnt = 0.0f;
 		}
-
 	}
-
 
 	m_reloadCnt += elapsedTime;
 
@@ -263,7 +264,6 @@ bool Player::CollisionCheck(Point point)
 	{
 		if (gameObjects[MONSTER].size() == 1)
 		{
-
 			shared_ptr<BossMonster> bossmonster = dynamic_pointer_cast<BossMonster>(object);
 			if (bossmonster != nullptr)
 			{

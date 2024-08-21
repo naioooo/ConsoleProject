@@ -14,7 +14,7 @@ Money::~Money()
 {
 }
 
-int Money::GetMoney()
+int Money::GetMoney() const
 {
 	return m_money;
 }

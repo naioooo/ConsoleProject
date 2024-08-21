@@ -12,12 +12,12 @@ NodeState SequenceNode::Tick(shared_ptr<Monster>& owner)
     for (auto& child : children)
     {
         NodeState status = child->Tick(owner);
-        if (status != NodeState::Success)
+        if (status != NodeState::SUCCESS)
         {
             return status;
         }
     }
-    return NodeState::Success;
+    return NodeState::SUCCESS;
 }
 
 NodeState SelectorNode::Tick(shared_ptr<Monster>& owner)
@@ -25,11 +25,11 @@ NodeState SelectorNode::Tick(shared_ptr<Monster>& owner)
     for (auto& child : children)
     {
         NodeState status = child->Tick(owner);
-        if (status != NodeState::Failure)
+        if (status != NodeState::FAILURE)
         {
             return status;
         }
     }
-    return NodeState::Failure;
+    return NodeState::FAILURE;
 }
 

@@ -30,7 +30,6 @@ Monster::Monster(const Point point, const int HP, const int speed, const int att
 
 	m_detectionRange = 10.0f;
 	m_attackRange = 1.0f;
-	m_chasePoint = Point(0, 0);
 	m_speedCnt = 0.0f;
 	m_state = WANDER;
 }
@@ -42,16 +41,6 @@ Monster::~Monster()
 vector<int> Monster::GetPath()
 {
 	return m_path;
-}
-
-Point Monster::GetChasePoint() const
-{
-	return m_chasePoint;
-}
-
-void Monster::SetChasePoint(Point point)
-{
-	m_chasePoint = point;
 }
 
 void Monster::SetState(int state)
@@ -79,6 +68,7 @@ void Monster::Update(float elapsedTime)
 {
 	m_speedCnt += elapsedTime;
 	int speed = m_speed;
+
 	if (m_state == CHASE)
 	{
 		speed = speed / 3;

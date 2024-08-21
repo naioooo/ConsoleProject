@@ -1,23 +1,24 @@
 #pragma once
 #include <iostream>
+#include <cstdio>
+
 #include <vector>
+#include <unordered_map>
 #include <string>
 #include <queue>
+
+#include <algorithm>
 #include <functional>
 #include <memory>
-#include <unordered_map>
-#include <algorithm>
+#include <random>
+
+#include <cmath>
+#include <limits>
+#include <chrono>
 
 #include <windows.h>
 #include <conio.h>
 #include <stdio.h>
-#include <cstdio>
-#include <cmath>
-
-#include <random>
-#include <limits>
-#include <chrono>
-
 
 using namespace std;
 
@@ -31,6 +32,9 @@ using namespace std;
 #define CH_MONSTER1 '#'
 #define CH_MONSTER2 '!'
 #define CH_MONSTER3 '^'
+#define CH_BOSS1 '('
+#define CH_BOSS2 '~'
+#define CH_BOSS3 ')'
 #define CH_PLAYER 'O'
 #define CH_BULLET '*'
 #define CH_FIREBALL 'o'
@@ -38,15 +42,12 @@ using namespace std;
 #define CH_ATTACKUP 'A'
 #define CH_MONEY '$'
 #define CH_SPEEDUP 'S'
-#define CH_BOSS1 '('
-#define CH_BOSS2 '~'
-#define CH_BOSS3 ')'
 
 enum class NodeState
 {
-	Success,
-	Failure,
-	Running
+	SUCCESS,
+	FAILURE,
+	RUNNING
 };
 
 enum State
@@ -79,22 +80,22 @@ enum OBJECT
 
 enum ColorType 
 {
-	BLACK,  	//0
-	darkBLUE,	//1
-	DarkGreen,	//2
-	darkSkyBlue,    //3
-	DarkRed,  	//4
-	DarkPurple,	//5
-	DarkYellow,	//6
-	GRAY,		//7
-	DarkGray,	//8
-	BLUE,		//9
-	GREEN,		//10
-	SkyBlue,	//11
-	RED,		//12
-	PURPLE,		//13
-	YELLOW,		//14
-	WHITE		//15
+	BLACK,  	
+	DARKBLUE,	
+	DARKGREEN,	
+	DARKSKYBLUE,
+	DARKRED,  	
+	DARKPURPLE,	
+	DARKYELLOW,	
+	GRAY,		
+	DARKGRAY,	
+	BLUE,		
+	GREEN,		
+	SKYBLUE,	
+	RED,		
+	PURPLE,		
+	YELLOW,		
+	WHITE		
 } ;
 
 struct Point
@@ -124,7 +125,8 @@ struct Point
 struct Node
 {
 	Point position;
-	float gCost, hCost; // gCost: 시작점에서 이 노드까지의 실제 거리, hCost: 이 노드에서 목표까지의 추정 거리
+	float gCost; // gCost: 시작점에서 이 노드까지의 실제 거리
+	float hCost; // hCost: 이 노드에서 목표까지의 추정 거리
 	shared_ptr<Node> parent;
 
 	// fCost 계산

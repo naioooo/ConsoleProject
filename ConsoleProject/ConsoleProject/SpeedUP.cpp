@@ -14,7 +14,7 @@ SpeedUP::~SpeedUP()
 {
 }
 
-int SpeedUP::GetSpeedUP()
+int SpeedUP::GetSpeedUP() const
 {
     return m_speedUP;
 }

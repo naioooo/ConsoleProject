@@ -30,15 +30,18 @@ BossMonster::BossMonster(const Point point, const int HP, const int speed, const
 
 	m_detectionRange = 15.0f;
 	m_attackRange = 5.0f;
-	m_chasePoint = Point(0, 0);
-	m_speedCnt = 0.0f;
+
 	m_state = WANDER;
+
 	m_coolTime = 10;
 	m_coolTimeCnt = 0;
 
 	m_isAttack = 0;
+
 	m_attackTime = 0;
 	m_attackTimeCnt = 0;
+
+	m_speedCnt = 0.0f;
 }
 
 BossMonster::~BossMonster()
@@ -55,21 +58,18 @@ void BossMonster::InsertBuffer(vector<string>& buffer)
 		}
 	}
 
-	int x = m_point.x;
-	int y = m_point.y;
-
-	buffer[y - 1][x - 1] = CH_BOSS1;
-	buffer[y - 1][x] = CH_BOSS2;
-	buffer[y - 1][x + 1] = CH_BOSS3;
-	buffer[y][x - 1] = CH_BOSS1;
+	buffer[m_point.y - 1][m_point.x - 1] = CH_BOSS1;
+	buffer[m_point.y - 1][m_point.x] = CH_BOSS2;
+	buffer[m_point.y - 1][m_point.x + 1] = CH_BOSS3;
+	buffer[m_point.y][m_point.x - 1] = CH_BOSS1;
 	if(m_state == ATTACK)
-		buffer[y][x] = CH_MONSTER3;
+		buffer[m_point.y][m_point.x] = CH_MONSTER3;
 	else if (m_state == WANDER)
-		buffer[y][x] = CH_BOSS2;
-	buffer[y][x + 1] = CH_BOSS3;
-	buffer[y + 1][x - 1] = CH_BOSS1;
-	buffer[y + 1][x] = CH_BOSS2;
-	buffer[y + 1][x + 1] = CH_BOSS3;
+		buffer[m_point.y][m_point.x] = CH_BOSS2;
+	buffer[m_point.y][m_point.x + 1] = CH_BOSS3;
+	buffer[m_point.y + 1][m_point.x - 1] = CH_BOSS1;
+	buffer[m_point.y + 1][m_point.x] = CH_BOSS2;
+	buffer[m_point.y + 1][m_point.x + 1] = CH_BOSS3;
 
 }
 

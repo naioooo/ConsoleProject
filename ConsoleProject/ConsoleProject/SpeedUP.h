@@ -11,7 +11,7 @@ public:
     SpeedUP(const Point point, const int lifetime, const int speedUP);
     ~SpeedUP();
 
-    int GetSpeedUP();
+    int GetSpeedUP() const;
 
     void InsertBuffer(vector<string>& buffer) override;
     void Update(float elapsedTime) override;

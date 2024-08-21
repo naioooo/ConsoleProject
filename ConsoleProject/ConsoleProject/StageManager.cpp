@@ -46,15 +46,6 @@ void StageManager::NextStage()
     }
 }
 
-Stage* StageManager::GetCurrentStage()
-{
-    if (currentStageIndex < stages.size()) 
-    {
-        return stages[currentStageIndex].get();
-    }
-    return nullptr;
-}
-
 size_t StageManager::GetCurrentStageIndex() const
 {
     return currentStageIndex;

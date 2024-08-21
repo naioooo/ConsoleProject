@@ -14,7 +14,7 @@ HpUP::~HpUP()
 {
 }
 
-int HpUP::GetHpUP()
+int HpUP::GetHpUP() const
 {
 	return m_HpUP;
 }

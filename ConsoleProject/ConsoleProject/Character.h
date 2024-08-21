@@ -18,10 +18,10 @@ public:
 	Character(const Point point, const int HP, const int speed, const int attack, const int defense);
 	~Character();
 
-	int GetHP();
-	int GetSpeed();
-	int GetAttack();
-	int GetDefense();
+	int GetHP() const;
+	int GetSpeed() const;
+	int GetAttack() const;
+	int GetDefense() const;
 
 	void SetHP(int HP);
 	void SetSpeed(int speed);

@@ -85,8 +85,10 @@ void GameScene::Draw()
 	// 게임화면
 	int x = 5;
 	int y = 5;
-	string str;
+	int idx = m_stageManager->GetCurrentStageIndex();
+
 	GoToXY(x, y);
+	string str;
 
 	for (const auto& str : m_buffer)
 	{
@@ -95,8 +97,8 @@ void GameScene::Draw()
 			switch (ch)
 			{
 			case CH_OBSTACLE:
-				TextColor(WHITE);
-				//TextColor(WHITE | WHITE<<4);
+				//TextColor(WHITE);
+				TextColor(WHITE | WHITE<<4);
 				break;
 			case CH_FIREBALL:
 				TextColor(RED);
@@ -104,27 +106,27 @@ void GameScene::Draw()
 			case CH_MONSTER1:
 			case CH_MONSTER2:
 			case CH_MONSTER3:
-				TextColor(DarkRed);
+				TextColor(DARKRED);
 				break;
 			case CH_BOSS1:
 			case CH_BOSS2:
 			case CH_BOSS3:
-				TextColor(DarkPurple);
+				TextColor(DARKPURPLE);
 				break;
 			case CH_PLAYER:
 				TextColor(BLUE);
 				break;
 			case CH_BULLET:
-				TextColor(DarkYellow);
+				TextColor(DARKYELLOW);
 				break;
 			case CH_HPUP:
-				TextColor(DarkGreen);
+				TextColor(DARKGREEN);
 				break;
 			case CH_MONEY:
 				TextColor(YELLOW);
 				break;
 			case CH_SPEEDUP:
-				TextColor(darkSkyBlue);
+				TextColor(DARKSKYBLUE);
 				break;
 			case CH_ATTACKUP:
 				TextColor(PURPLE);
@@ -138,8 +140,23 @@ void GameScene::Draw()
 	}		
 
 	// 게임 정보 출력
+	x = 90;
+	y = 6;
+	GoToXY(x, y);
+
+	TextColor(WHITE);
+
+	if (idx == m_stageManager->GetStagesSize() - 1)
+	{
+		cout << "BOSS STAGE" ;
+	}
+	else
+	{
+		cout << "STAGE " << idx + 1;
+	}
+
 	x = 75;
-	y = 9;
+	y += 2;
 	GoToXY(x, y);
 
 	TextColor(RED);
@@ -186,7 +203,7 @@ void GameScene::Draw()
 
 	y++;
 	GoToXY(x, y);
-	TextColor(DarkRed);
+	TextColor(DARKRED);
 	cout << "ATTACK : ";
 	str = "";
 	if (m_player != nullptr)
@@ -207,7 +224,7 @@ void GameScene::Draw()
 
 	y++;
 	GoToXY(x, y);
-	TextColor(darkSkyBlue);
+	TextColor(DARKSKYBLUE);
 	cout << "SPEED : ";
 	str = "";
 	if (m_player != nullptr)
@@ -229,8 +246,6 @@ void GameScene::Draw()
 	y++;
 	GoToXY(x, y);
 	TextColor(RED);
-
-	int idx = m_stageManager->GetCurrentStageIndex();
 
 	if (idx == m_stageManager->GetStagesSize() - 1)
 	{
@@ -283,7 +298,46 @@ void GameScene::Draw()
 
 	/////////
 	x = 75;
-	y += 5;
+	y += 4;
+	TextColor(WHITE);
+	GoToXY(x, y);
+	cout << "buy   : ";
+
+	x += 8;
+	GoToXY(x, y);
+	cout << " Q";
+
+	x += 9;
+	GoToXY(x, y);
+	cout << " W";
+
+	x += 9;
+	GoToXY(x, y);
+	cout << " E";
+
+	//
+
+	x = 75;
+	y++;
+	GoToXY(x, y);
+	cout << "use   : ";
+
+	x += 8;
+	GoToXY(x, y);
+	cout << " A";
+
+	x += 9;
+	GoToXY(x, y);
+	cout << " S";
+
+	x += 9;
+	GoToXY(x, y);
+	cout << " D";
+
+	//
+
+	x = 75;
+	y += 2;
 	TextColor(WHITE);
 	GoToXY(x, y);
 	cout << "skill : ";
@@ -294,9 +348,9 @@ void GameScene::Draw()
 
 	x += 9;
 	GoToXY(x, y);
-	cout << " 흩뿌리기";
+	cout << " 범위기";
 
-	x += 12;
+	x += 9;
 	GoToXY(x, y);
 	cout << " 레이저";
 
@@ -315,7 +369,7 @@ void GameScene::Draw()
 	GoToXY(x, y);
 	cout << " 1000";
 
-	x += 12;
+	x += 9;
 	GoToXY(x, y);
 	cout << " 1000";
 
@@ -363,7 +417,7 @@ void GameScene::Draw()
 		}
 	}
 
-	x += 12;
+	x += 9;
 	GoToXY(x, y);
 	str = "";
 	if (m_player != nullptr)
@@ -380,7 +434,7 @@ void GameScene::Draw()
 		{
 			cout << " ";
 		}
-	}
+	}	
 }
 
 void GameScene::DrawUI()
@@ -392,11 +446,11 @@ void GameScene::DrawUI()
 	string s5 = "─";
 	string s6 = "│";
 
-	int x = 50;
+	int x = 55;
 	int y = 2;
 	GoToXY(x, y);
 
-	cout << " SHOOTING GAME" << endl;
+	cout << "SHOOTING GAME" << endl;
 
 	x = 4;
 	y = 4;

@@ -14,7 +14,7 @@ AttackUP::~AttackUP()
 {
 }
 
-int AttackUP::GetAttackUP()
+int AttackUP::GetAttackUP() const
 {
 	return m_AttackUP;
 }

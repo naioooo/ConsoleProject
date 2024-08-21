@@ -29,6 +29,4 @@ public:
 	void DrawUI();
 	void Input(float elapsedTime);
 	void ChangeScene() override; // 조건 체크 메서드
-
-
 };

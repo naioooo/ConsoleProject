@@ -1,6 +1,15 @@
 #include "SceneManager.h"
 
 
+SceneManager::SceneManager()
+{
+    AddScene("Title", std::make_shared<TitleScene>());
+    AddScene("Game", std::make_shared<GameScene>());
+    AddScene("Ending", std::make_shared<EndingScene>());
+
+    ChangeScene("Title");
+}
+
 SceneManager& SceneManager::Instance()
 {
     static SceneManager instance;
@@ -23,7 +32,8 @@ void SceneManager::ChangeScene(const string& name)
         currentScene = scenes[name];
         currentScene->Enter();
     }
-    else {
+    else 
+    {
         std::cout << "Scene not found: " << name << std::endl;
     }
 }

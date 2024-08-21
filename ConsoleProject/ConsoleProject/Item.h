@@ -13,7 +13,7 @@ public:
 	Item(const Point point, const int lifetime);
 	~Item();
 
-	string GetName();
+	string GetName() const;
 
 	virtual void Update(float elapsedTime) override;
 };

@@ -54,7 +54,7 @@ NodeState Boss_IsTimeToAttackCondition::Tick(shared_ptr<Monster>& owner)
         boss->SetCoolTimeCnt(boss->GetCoolTimeCnt() + 1);
     }
 
-    return isCoolOn ? NodeState::Success : NodeState::Failure;
+    return isCoolOn ? NodeState::SUCCESS : NodeState::FAILURE;
 }
 
 NodeState Boss_IsAttackingNowCondition::Tick(shared_ptr<Monster>& owner)
@@ -67,12 +67,11 @@ NodeState Boss_IsAttackingNowCondition::Tick(shared_ptr<Monster>& owner)
         isAttack = true;
     }
 
-    return isAttack ? NodeState::Success : NodeState::Failure;
+    return isAttack ? NodeState::SUCCESS : NodeState::FAILURE;
 }
 
 NodeState Boss_AttackActionNode::Tick(shared_ptr<Monster>& owner)
 {
-    // 플레이어를 공격하는 로직을 구현합니다.
     shared_ptr<BossMonster> boss = dynamic_pointer_cast<BossMonster>(owner);
     
     switch (boss->GetIsAttack())
@@ -107,13 +106,12 @@ NodeState Boss_AttackActionNode::Tick(shared_ptr<Monster>& owner)
     }
 
     owner->SetState(ATTACK);
-    return NodeState::Success; // 공격 완료
+    return NodeState::SUCCESS; // 공격 완료
 }
 
 NodeState Boss_WanderActionNode::Tick(shared_ptr<Monster>& owner)
 {
     shared_ptr<BossMonster> boss = dynamic_pointer_cast<BossMonster>(owner);
-    // 적이 배회하는 로직을 구현합니다. 
     random_device rd;
     mt19937 gen(rd());
 
@@ -122,7 +120,7 @@ NodeState Boss_WanderActionNode::Tick(shared_ptr<Monster>& owner)
     boss->Move(dir(gen));
 
     boss->SetState(WANDER);
-    return NodeState::Running; // 배회 중이므로 Running 상태를 반환
+    return NodeState::RUNNING; 
 }
 
 
