@@ -41,7 +41,10 @@ bool FireBall::CollisionCheck(Point point)
 	if (player->GetPoint() == point)
 	{
 		int HP = player->GetHP() - m_damage;
-		player->SetHP(HP);
+		if (!player->GetInvincibility())
+		{
+			player->SetHP(HP);
+		}
 		return false;
 	}
 	

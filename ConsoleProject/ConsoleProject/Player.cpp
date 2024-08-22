@@ -20,6 +20,7 @@ Player::Player(const Point point, const int HP, const int speed, const int attac
 	m_killCnt = 0;
 	m_reloadCnt = 200.f;
 	m_reInputCnt = 60.f;
+	m_invincibility = false;
 }
 
 Player::~Player()
@@ -69,6 +70,11 @@ vector<int> Player::GetSkillCnt()
 	return m_skillCnt;
 }
 
+bool Player::GetInvincibility()
+{
+	return m_invincibility;
+}
+
 void Player::SetMoney(const unsigned int money)
 {
 	m_money = money;
@@ -80,8 +86,7 @@ void Player::SetKillCnt(const int kill_cnt)
 }
 
 void Player::Input(const float elapsedTime)
-{
-	
+{	
 	m_speedCnt += elapsedTime;
 
 	if (m_speedCnt > m_speed)
@@ -110,6 +115,20 @@ void Player::Input(const float elapsedTime)
 
 	if (m_reInputCnt > 60.0f)
 	{
+		if (GetAsyncKeyState(VK_F1) & 0x8000)
+		{
+			if (!m_invincibility)
+			{
+				m_invincibility = true;
+			}
+			else
+			{
+				m_invincibility = false;
+			}
+
+			m_reInputCnt = 0.0f;
+		}
+
 		if (GetAsyncKeyState('Q') & 0x8000)
 		{
 			if (m_money >= 500)

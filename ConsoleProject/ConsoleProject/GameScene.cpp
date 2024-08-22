@@ -296,6 +296,18 @@ void GameScene::Draw()
 		cout << " / " << (m_stageManager->GetCurrentStageIndex() + 1) * 10;
 	}
 
+	y++;
+	GoToXY(x, y);
+	TextColor(RED);
+	if (m_player->GetInvincibility())
+	{
+		cout << "¹«Àû";
+	}
+	else
+	{
+		cout << "     ";
+	}
+
 	/////////
 	x = 75;
 	y += 4;

@@ -165,7 +165,10 @@ bool BossMonster::CollisionCheck(Point point)
 		m_point.y > point.y - 2 && m_point.y < point.y + 2)
 	{
 		shared_ptr<Player> player = dynamic_pointer_cast<Player>(gameObjects[PLAYER][0]);
-		player->SetHP(player->GetHP() - 1);
+		if (!player->GetInvincibility())
+		{
+			player->SetHP(player->GetHP() - 1);
+		}
 		return false;
 	}
 

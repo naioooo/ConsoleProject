@@ -49,7 +49,10 @@ NodeState AttackActionNode::Tick(shared_ptr<Monster>& owner)
 {
     vector<vector<shared_ptr<Object>>> gameObjects = GameScene::m_gameObjects;
     shared_ptr<Player> player = dynamic_pointer_cast<Player>(gameObjects[PLAYER][0]);
-    player->SetHP(player->GetHP() - owner->GetAttack());
+    if (!player->GetInvincibility())
+    {
+        player->SetHP(player->GetHP() - owner->GetAttack());
+    }
 
     owner->SetState(ATTACK);
     return NodeState::SUCCESS; 

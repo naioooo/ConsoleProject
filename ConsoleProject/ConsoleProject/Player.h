@@ -15,6 +15,8 @@ private:
 	float m_reInputCnt;	
 	int m_killCnt;
 
+	bool m_invincibility;
+
 public:
 	Player();
 	Player(const Point point, const int HP, const int speed, const int attack, const int defense, const string& name);
@@ -26,6 +28,7 @@ public:
 	unsigned int GetMoney() const;
 	int GetKillCnt() const;
 	vector<int> GetSkillCnt();
+	bool GetInvincibility();
 
 	void SetMoney(const unsigned int money);
 	void SetKillCnt(const int killCnt);
